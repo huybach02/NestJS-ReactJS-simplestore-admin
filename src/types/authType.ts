@@ -9,3 +9,10 @@ export type LoginType = {
   password: string;
   remember: boolean;
 };
+
+export type SocialLoginType = {
+  name: string | null;
+  email: string | null;
+  avatar: string | null;
+  accountType: string | null;
+};
