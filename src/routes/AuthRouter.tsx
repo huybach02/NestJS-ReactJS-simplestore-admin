@@ -25,7 +25,7 @@ const AuthRouter = () => {
         <Flex align="center" justify="center" style={{flexDirection: "column"}}>
           <Image
             width={md ? 500 : 200}
-            src="https://res.cloudinary.com/dveqjgj4l/image/upload/v1732279680/simplestore/b36kpr0fsiljodfmsoaj.png"
+            src={import.meta.env.VITE_APP_LOGO_URL}
             preview={false}
           />
           <Typography.Title level={md ? 1 : 3} style={{fontWeight: 700}}>

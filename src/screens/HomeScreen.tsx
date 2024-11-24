@@ -1,26 +1,17 @@
-import {Button} from "antd";
-import {useDispatch} from "react-redux";
-import {authService} from "../service/authService";
-import {removeUser} from "../redux/slice/userSlice";
-import {useNavigate} from "react-router-dom";
+import {productService} from "../service/productService";
+import {useEffect} from "react";
 
 const HomeScreen = () => {
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
-
-  const logout = async () => {
-    await authService.logout();
-    dispatch(removeUser());
-    navigate("/");
+  const getProducts = async () => {
+    const response = await productService.findAll();
+    console.log(response);
   };
 
-  return (
-    <>
-      <Button type="primary" onClick={() => logout()}>
-        Logout
-      </Button>
-    </>
-  );
+  useEffect(() => {
+    getProducts();
+  }, []);
+
+  return <>Home</>;
 };
 
 export default HomeScreen;

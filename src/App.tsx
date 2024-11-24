@@ -26,6 +26,13 @@ function App() {
           token: {
             colorPrimary: "#000",
           },
+          components: {
+            Menu: {
+              colorPrimary: "#fff",
+              colorPrimaryActive: "#fff",
+              colorText: "#000",
+            },
+          },
         }}
       >
         <BrowserRouter>

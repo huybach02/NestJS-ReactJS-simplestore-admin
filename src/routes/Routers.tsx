@@ -5,11 +5,9 @@ import {RootState} from "../redux/store";
 import {useEffect, useState} from "react";
 import {User} from "../types/userType";
 import {Loading} from "../components/Loading";
-import {useNavigate} from "react-router-dom";
 import {message} from "antd";
 
 export const Routers = () => {
-  const navigate = useNavigate();
   const [data, setData] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -19,20 +17,19 @@ export const Routers = () => {
     let timeout: ReturnType<typeof setTimeout>;
     setIsLoading(true);
     if (user) {
+      if (user.role === "admin") {
+        setData(user);
+      } else {
+        setData(null);
+        message.error("You are not authorized to access this page");
+      }
       timeout = setTimeout(() => {
-        if (user.role === "admin") {
-          setData(user);
-        } else {
-          setData(null);
-          message.error("You are not authorized to access this page");
-        }
-        navigate("/");
         setIsLoading(false);
       }, 2000);
     } else {
       timeout = setTimeout(() => {
-        setIsLoading(false);
         setData(null);
+        setIsLoading(false);
       }, 2000);
     }
 
