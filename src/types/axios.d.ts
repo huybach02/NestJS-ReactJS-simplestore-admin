@@ -5,5 +5,6 @@ declare module "axios" {
   export interface AxiosResponse<T = any> {
     success: boolean;
     data: T;
+    total: number;
   }
 }

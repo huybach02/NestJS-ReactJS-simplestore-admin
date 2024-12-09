@@ -14,3 +14,37 @@ label {
   font-weight: 500 !important;
 }
 
+
+.ant-select-item-option-selected:not(.ant-select-item-option-disabled) {
+  background-color: #000 !important; 
+  color: #fff !important;
+}
+
+
+.ant-select-dropdown {
+  color: #000; 
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 2px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #000;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+.no-motion * {
+  transition: none !important;
+}

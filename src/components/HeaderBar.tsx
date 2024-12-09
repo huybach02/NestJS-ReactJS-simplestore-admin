@@ -1,5 +1,5 @@
 import {Avatar, Button, Col, Dropdown, Input, Row} from "antd";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {setShowSidebar} from "../redux/slice/dataSlice";
 import {
   FaBars,
@@ -14,10 +14,16 @@ import {MenuProps} from "antd";
 import {useNavigate} from "react-router-dom";
 import {removeUser} from "../redux/slice/userSlice";
 import {authService} from "../service/authService";
+import {RootState} from "../redux/store";
+import {signOut} from "firebase/auth";
+import {firebaseAuth} from "../firebase/firebaseConfig";
 
 const HeaderBar = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const {showSidebar} = useSelector((state: RootState) => state.data);
+  const {user} = useSelector((state: RootState) => state.user);
 
   const items: MenuProps["items"] = [
     {
@@ -52,10 +58,11 @@ const HeaderBar = () => {
     },
   ];
 
-  const {md} = Grid.useBreakpoint();
+  const {lg} = Grid.useBreakpoint();
 
   const logout = async () => {
     await authService.logout();
+    signOut(firebaseAuth);
     dispatch(removeUser());
     navigate("/");
   };
@@ -67,25 +74,25 @@ const HeaderBar = () => {
           <Button
             size="middle"
             onClick={() => dispatch(setShowSidebar())}
-            style={{display: md ? "none" : ""}}
+            style={{display: lg ? "none" : ""}}
           >
             <FaBars />
           </Button>
           <Input
             placeholder="Search"
             prefix={<FaSearch />}
-            style={{display: md ? "" : "none"}}
+            style={{display: lg ? "" : "none"}}
           />
         </Col>
-        <Col span={md ? 12 : 16}>
+        <Col span={lg ? 12 : 16} style={{display: showSidebar ? "none" : ""}}>
           <Row justify="end" align="middle">
-            <Col span={md ? 2 : 6}>
+            <Col span={lg ? 2 : 6}>
               <Button>
                 <FaBell />
               </Button>
             </Col>
             <Col
-              span={md ? 2 : 6}
+              span={lg ? 2 : 6}
               style={{
                 display: "flex",
                 justifyContent: "flex-end",
@@ -94,17 +101,7 @@ const HeaderBar = () => {
             >
               <Dropdown menu={{items}} trigger={["click"]}>
                 <a onClick={(e) => e.preventDefault()}>
-                  <Avatar
-                    src={
-                      <img src={"https://i.pravatar.cc/150?u=1"} alt="avatar" />
-                    }
-                    size="large"
-                    style={{
-                      display: "flex",
-                      justifyContent: "flex-end",
-                      alignItems: "center",
-                    }}
-                  />
+                  <Avatar src={user?.avatar} icon={<FaUser />} size="large" />
                 </a>
               </Dropdown>
             </Col>

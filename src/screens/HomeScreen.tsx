@@ -1,9 +1,9 @@
-import {productService} from "../service/productService";
+import {supplierService} from "../service/supplierService";
 import {useEffect} from "react";
 
 const HomeScreen = () => {
   const getProducts = async () => {
-    const response = await productService.findAll();
+    const response = await supplierService.findAll();
     console.log(response);
   };
 

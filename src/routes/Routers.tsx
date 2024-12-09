@@ -25,12 +25,12 @@ export const Routers = () => {
       }
       timeout = setTimeout(() => {
         setIsLoading(false);
-      }, 2000);
+      }, 1000);
     } else {
       timeout = setTimeout(() => {
         setData(null);
         setIsLoading(false);
-      }, 2000);
+      }, 1000);
     }
 
     return () => clearTimeout(timeout);

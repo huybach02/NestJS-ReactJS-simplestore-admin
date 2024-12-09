@@ -1,16 +1,27 @@
-import React, {useEffect, useState} from "react";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import {useEffect, useState} from "react";
 import {InboxOutlined} from "@ant-design/icons";
 import type {UploadProps} from "antd";
 import {message, Upload, Image} from "antd";
 
 const {Dragger} = Upload;
 
-const ImageUpload = () => {
+type ImageUploadProps = {
+  multiple?: boolean | undefined;
+  setImageLists: any;
+  width?: string;
+};
+
+const ImageUploadZone = ({
+  setImageLists,
+  multiple = false,
+  width,
+}: ImageUploadProps) => {
   const [imageUrls, setImageUrls] = useState<string[]>([]);
 
   const props: UploadProps = {
     name: "file",
-    multiple: true,
+    multiple: multiple,
     customRequest: async (options) => {
       const {file, onSuccess, onError, filename} = options;
 
@@ -55,22 +66,16 @@ const ImageUpload = () => {
   };
 
   useEffect(() => {
-    console.log(imageUrls);
+    setImageLists(imageUrls);
   }, [imageUrls]);
 
   return (
     <div>
-      <Dragger {...props}>
+      <Dragger {...props} style={width ? {width: width} : {}}>
         <p className="ant-upload-drag-icon">
           <InboxOutlined />
         </p>
-        <p className="ant-upload-text">
-          Click or drag file to this area to upload
-        </p>
-        <p className="ant-upload-hint">
-          Support for a single or bulk upload. Strictly prohibited from
-          uploading company data or other banned files.
-        </p>
+        <p className="ant-upload-text">Click or drag image(s) here</p>
       </Dragger>
 
       {/* Phần preview ảnh */}
@@ -96,4 +101,4 @@ const ImageUpload = () => {
   );
 };
 
-export default ImageUpload;
+export default ImageUploadZone;
