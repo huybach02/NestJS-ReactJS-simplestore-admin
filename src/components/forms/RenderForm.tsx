@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import {Form, Input, Radio, Select} from "antd";
+import {Checkbox, Form, Input, Radio, Select} from "antd";
 import {Field, FormField} from "../../types/fieldType";
 
 type Props = {
@@ -60,6 +60,13 @@ const RenderForm = ({fields, form, handleSubmit}: Props) => {
               return <Radio value={option.value}>{option.label}</Radio>;
             })}
           </Radio.Group>
+        );
+      case "checkbox":
+        return (
+          <Checkbox.Group
+            options={item.options}
+            style={{width: item.isFullWidth ? "100%" : "auto"}}
+          />
         );
       default:
         return null;

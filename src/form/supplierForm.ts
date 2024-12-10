@@ -67,7 +67,7 @@ export const supplierForm = ({
     },
     {
       name: "categories",
-      label: "Category",
+      label: "Categories",
       rules: [
         // {
         //   required: true,
@@ -111,8 +111,8 @@ export const supplierForm = ({
       },
     },
     {
-      name: "isTaking",
-      label: "Type",
+      name: "takingReturn",
+      label: "Taking Return",
       rules: [
         {
           required: true,
@@ -123,11 +123,11 @@ export const supplierForm = ({
         options: [
           {
             label: "Taking return",
-            value: 1,
+            value: "Taking return",
           },
           {
             label: "Not Taking return",
-            value: 0,
+            value: "Not taking return",
           },
         ],
         isButton: true,

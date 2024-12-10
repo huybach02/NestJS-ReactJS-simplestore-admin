@@ -39,4 +39,12 @@ export const baseService = {
       return Promise.reject(error);
     }
   },
+  download: async (endpoint: string, exportFields: any) => {
+    try {
+      return await axiosInstance.post(`${endpoint}/download`, exportFields);
+    } catch (error: any) {
+      message.error(error.response.data.message);
+      return Promise.reject(error);
+    }
+  },
 };

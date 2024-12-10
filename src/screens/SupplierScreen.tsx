@@ -15,6 +15,7 @@ import RenderForm from "../components/forms/RenderForm";
 import TitlePage from "../components/TitlePage";
 import UploadSingleImage from "../components/UploadSingleImage";
 import {supplierForm} from "../form/supplierForm";
+import ExportForm from "../exportForm/ExportForm";
 
 const endpoint = "suppliers";
 type DataType = SupplierType;
@@ -99,8 +100,15 @@ export const SupplierScreen = () => {
           total: total,
           current: +currentPage,
           pageSize: +currentLimit,
+          showQuickJumper: true,
         }}
-        title={() => <TitlePage title="Suppliers" />}
+        title={() => (
+          <TitlePage
+            title="Suppliers"
+            endpoint={endpoint}
+            formElement={<ExportForm endpoint={endpoint} />}
+          />
+        )}
       />
       <CustomModal
         title={isEditing ? "Edit Supplier" : "Add new supplier"}

@@ -33,13 +33,20 @@ type RadioField = BaseField & {
   isFullWidth?: boolean;
 };
 
-export type Field = InputField | SelectField | RadioField;
+type CheckboxField = BaseField & {
+  fieldType: "checkbox";
+  options: Option[];
+  isButton?: boolean;
+  isFullWidth?: boolean;
+};
+
+export type Field = InputField | SelectField | RadioField | CheckboxField;
 
 export type FormField = {
   name: string;
   label: string;
   rules?: Rule[];
-  initialValue?: string | number | boolean;
+  initialValue?: string | number | boolean | string[];
   field: Field;
 };
 

@@ -2,7 +2,7 @@ import {FormField} from "../types/fieldType";
 
 export const activeOptions: FormField = {
   name: "active",
-  label: "Active",
+  label: "Status",
   rules: [
     {
       required: true,
@@ -14,11 +14,11 @@ export const activeOptions: FormField = {
     options: [
       {
         label: "Active",
-        value: true,
+        value: "Active",
       },
       {
         label: "Inactive",
-        value: false,
+        value: "Inactive",
       },
     ],
     isButton: true,

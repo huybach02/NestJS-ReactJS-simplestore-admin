@@ -7,6 +7,12 @@ export interface DataState {
   isEditing: boolean;
   isConfirm: boolean;
   total: number;
+  showModalExport: boolean;
+  exportFields: {
+    fields: string[];
+    date: string[];
+    isAllDate: boolean;
+  };
 }
 
 const initialState: DataState = {
@@ -16,6 +22,12 @@ const initialState: DataState = {
   isEditing: false,
   isConfirm: false,
   total: 0,
+  showModalExport: false,
+  exportFields: {
+    fields: [],
+    date: [],
+    isAllDate: false,
+  },
 };
 
 export const dataSlice = createSlice({
@@ -43,6 +55,19 @@ export const dataSlice = createSlice({
     setTotal: (state, action: PayloadAction<number>) => {
       state.total = action.payload;
     },
+    setShowModalExport: (state) => {
+      state.showModalExport = true;
+    },
+    setCloseModalExport: (state) => {
+      state.showModalExport = false;
+    },
+    setExportFields: (state, action: PayloadAction<{
+      fields: string[];
+      date: string[];
+      isAllDate: boolean;
+    }>) => {
+      state.exportFields = action.payload;
+    },
   },
 });
 
@@ -55,6 +80,9 @@ export const {
   setIsEditing,
   setIsConfirm,
   setTotal,
+  setShowModalExport,
+  setCloseModalExport,
+  setExportFields,
 } = dataSlice.actions;
 
 export default dataSlice.reducer;

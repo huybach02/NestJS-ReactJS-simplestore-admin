@@ -88,14 +88,16 @@ export const SupplierColumns = ({
       key: "contact",
     },
     {
-      title: "Type",
-      dataIndex: "isTaking",
-      key: "type",
+      title: "Taking Return",
+      dataIndex: "takingReturn",
+      key: "takingReturn",
       render: (type) => (
         <Badge
           className="site-badge-count-109"
-          count={type === 0 ? "Not taking return" : "Taking return"}
-          style={{backgroundColor: type === 0 ? "red" : "#389e0d"}}
+          count={type}
+          style={{
+            backgroundColor: type === "Taking return" ? "#389e0d" : "red",
+          }}
         />
       ),
     },
@@ -106,8 +108,8 @@ export const SupplierColumns = ({
       render: (active) => (
         <Badge
           className="site-badge-count-109"
-          count={active ? "Active" : "Inactive"}
-          style={{backgroundColor: active ? "#389e0d" : "red"}}
+          count={active}
+          style={{backgroundColor: active === "Active" ? "#389e0d" : "red"}}
         />
       ),
     },

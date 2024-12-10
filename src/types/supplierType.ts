@@ -7,7 +7,7 @@ export type SupplierType = {
   category: string[];
   price: string;
   contact: string;
-  isTaking: string;
+  takingReturn: string;
   photoUrl: string | undefined;
   active: boolean;
   createdAt: string;
@@ -21,7 +21,7 @@ export type CreateSupplierType = {
   category: string[];
   price: string;
   contact: string;
-  isTaking: string;
+  takingReturn: string;
   photoUrl: string | undefined;
   active: boolean;
 };
