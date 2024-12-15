@@ -1,9 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import {Avatar, Badge, Button, Flex, Grid, Tooltip} from "antd";
-import {FaUser} from "react-icons/fa";
+import {Badge, Button, Flex, Tooltip, Tree} from "antd";
 import {FiEdit, FiTrash} from "react-icons/fi";
 import {ColumnProps} from "antd/es/table";
-import {SupplierType} from "../types/supplierType";
 import {
   setIsConfirm,
   setIsEditing,
@@ -11,23 +9,28 @@ import {
 } from "../redux/slice/dataSlice";
 import confirmAction from "../utils/confirmAction";
 import {baseService} from "../service/baseService";
+import dayjs from "dayjs";
+import {CategoryType} from "../types/categoryType";
+import {createTreeCategoryByCurrentId} from "../utils/handleTreeValue";
+import {FaCaretRight} from "react-icons/fa";
 
 interface Props {
   dispatch: any;
   form: any;
-  setItemSelected: (supplier: SupplierType | undefined) => void;
+  setItemSelected: (category: CategoryType | undefined) => void;
   handleGetData: () => void;
   endpoint: string;
+  categories: any[];
 }
 
-export const SupplierColumns = ({
+export const CategoryColumns = ({
   dispatch,
   form,
   setItemSelected,
   handleGetData,
   endpoint,
-}: Props): ColumnProps<SupplierType>[] => {
-  const {md} = Grid.useBreakpoint();
+  categories,
+}: Props): ColumnProps<CategoryType>[] => {
   return [
     {
       title: "#",
@@ -35,46 +38,33 @@ export const SupplierColumns = ({
       key: "index",
     },
     {
-      title: "Avatar",
-      dataIndex: "photoUrl",
-      key: "photoUrl",
-      render: (photoUrl) => (
-        <Avatar
-          src={photoUrl}
-          shape="square"
-          size={md ? 70 : 50}
-          icon={<FaUser />}
-        />
-      ),
-    },
-    {
-      title: "Supplier Name",
+      title: "Category Name",
       dataIndex: "name",
       key: "name",
     },
     {
-      title: "Supplier Email",
-      dataIndex: "email",
-      key: "email",
-    },
-    {
-      title: "Contact",
-      dataIndex: "contact",
-      key: "contact",
-    },
-    {
-      title: "Taking Return",
-      dataIndex: "takingReturn",
-      key: "takingReturn",
-      render: (type) => (
-        <Badge
-          className="site-badge-count-109"
-          count={type === 1 ? "Taking return" : "Not taking return"}
-          style={{
-            backgroundColor: type === 1 ? "#389e0d" : "red",
-          }}
-        />
-      ),
+      title: "Tree Category",
+      dataIndex: "id",
+      key: "id",
+      render: (value) => {
+        const treeCategory = createTreeCategoryByCurrentId(categories, value);
+        // return (
+        //   <div>
+        //     {treeCategory.map(
+        //       (item, index) =>
+        //         `${item.title} ${index < treeCategory.length - 1 ? " > " : ""} `
+        //     )}
+        //   </div>
+        // );
+        return treeCategory.length > 0 ? (
+          <Tree
+            showLine
+            switcherIcon={<FaCaretRight size={18} />}
+            defaultExpandAll={true}
+            treeData={treeCategory}
+          />
+        ) : null;
+      },
     },
     {
       title: "Active",
@@ -102,7 +92,15 @@ export const SupplierColumns = ({
               onClick={() => {
                 dispatch(setIsEditing(true));
                 dispatch(setShowModal());
-                form.setFieldsValue(record);
+                form.setFieldsValue({
+                  ...record,
+                  saleStartDate: record.saleStartDate
+                    ? dayjs(record.saleStartDate)
+                    : null,
+                  saleEndDate: record.saleEndDate
+                    ? dayjs(record.saleEndDate)
+                    : null,
+                });
                 setItemSelected(record);
               }}
             >

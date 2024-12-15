@@ -1,35 +1,43 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import {Avatar, Typography} from "antd";
-import {FaUser} from "react-icons/fa";
+import {Avatar, Grid, Typography} from "antd";
+import {FaImage} from "react-icons/fa";
 import ImageUploadButton from "./ImageUploadButton";
 import {useSelector} from "react-redux";
 import {RootState} from "../redux/store";
 
 type Props = {
+  title: string;
   photoUrl: string | undefined;
   setPhotoUrl: any;
-  itemSelected: any;
+  oldImage: any;
 };
 
-const UploadSingleImage = ({photoUrl, setPhotoUrl, itemSelected}: Props) => {
+const UploadSingleImage = ({
+  title = "Avatar",
+  photoUrl,
+  setPhotoUrl,
+  oldImage,
+}: Props) => {
   const {isEditing} = useSelector((state: RootState) => state.data);
+
+  const {lg} = Grid.useBreakpoint();
 
   return (
     <>
-      <Typography.Text style={{fontWeight: "600"}}>Avatar</Typography.Text>
+      <Typography.Text style={{fontWeight: "600"}}>{title}</Typography.Text>
       {photoUrl ? (
-        <Avatar size={100} src={photoUrl} />
+        <Avatar size={lg ? 100 : 70} src={photoUrl} shape="square" />
       ) : isEditing ? (
-        itemSelected?.photoUrl ? (
-          <Avatar size={100} src={itemSelected?.photoUrl} />
+        oldImage ? (
+          <Avatar size={lg ? 100 : 70} src={oldImage} shape="square" />
         ) : (
-          <Avatar size={100}>
-            <FaUser size={50} />
+          <Avatar size={lg ? 100 : 70} shape="square">
+            <FaImage size={lg ? 50 : 30} />
           </Avatar>
         )
       ) : (
-        <Avatar size={100}>
-          <FaUser size={50} />
+        <Avatar size={lg ? 100 : 70} shape="square">
+          <FaImage size={lg ? 50 : 30} />
         </Avatar>
       )}
       <label htmlFor="photoUrl">

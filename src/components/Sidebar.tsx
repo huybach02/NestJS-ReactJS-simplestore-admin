@@ -6,6 +6,7 @@ import {
   FaChartPie,
   FaStore,
   FaClipboardList,
+  FaList,
 } from "react-icons/fa";
 import {RiSettingsFill} from "react-icons/ri";
 import {useSelector} from "react-redux";
@@ -29,8 +30,13 @@ export const Sidebar = () => {
       icon: <FaFire size={20} />,
     },
     {
-      key: "inventory",
-      label: <Link to="/inventory">Inventory</Link>,
+      key: "categories",
+      label: <Link to="/categories">Categories</Link>,
+      icon: <FaList size={18} />,
+    },
+    {
+      key: "products",
+      label: <Link to="/products">Products</Link>,
       icon: <FaBoxes size={20} />,
     },
     {

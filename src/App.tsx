@@ -6,6 +6,8 @@ import {setUser} from "./redux/slice/userSlice";
 import {authService} from "./service/authService";
 import {BrowserRouter} from "react-router-dom";
 
+import "reactjs-tiptap-editor/style.css";
+
 function App() {
   const dispatch = useDispatch();
 

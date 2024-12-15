@@ -61,12 +61,18 @@ export const dataSlice = createSlice({
     setCloseModalExport: (state) => {
       state.showModalExport = false;
     },
-    setExportFields: (state, action: PayloadAction<{
-      fields: string[];
-      date: string[];
-      isAllDate: boolean;
-    }>) => {
+    setExportFields: (
+      state,
+      action: PayloadAction<{
+        fields: string[];
+        date: string[];
+        isAllDate: boolean;
+      }>
+    ) => {
       state.exportFields = action.payload;
+    },
+    clearExportFields: (state) => {
+      state.exportFields = initialState.exportFields;
     },
   },
 });
@@ -83,6 +89,7 @@ export const {
   setShowModalExport,
   setCloseModalExport,
   setExportFields,
+  clearExportFields,
 } = dataSlice.actions;
 
 export default dataSlice.reducer;

@@ -1,4 +1,5 @@
-body, html {
+body,
+html {
   margin: 0;
   padding: 0;
   overflow: hidden;
@@ -14,20 +15,18 @@ label {
   font-weight: 500 !important;
 }
 
-
 .ant-select-item-option-selected:not(.ant-select-item-option-disabled) {
-  background-color: #000 !important; 
+  background-color: #000 !important;
   color: #fff !important;
 }
 
-
 .ant-select-dropdown {
-  color: #000; 
+  color: #000;
 }
 
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
-  width: 2px;
+  width: 6px;
   height: 8px;
 }
 
@@ -47,4 +46,48 @@ label {
 
 .no-motion * {
   transition: none !important;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0;
+}
+
+.quill-editor {
+  display: flex;
+  flex-direction: column;
+}
+
+.quill-editor .ql-container {
+  flex: 1;
+  min-height: 400px;
+  height: auto;
+}
+
+.quill-editor .ql-editor {
+  min-height: 400px;
+  height: auto;
+  max-height: none;
+  overflow-y: auto;
+}
+
+.ant-menu-item {
+  display: flex !important;
+  align-items: center !important;
+  font-weight: 500 !important;
+}
+
+.ant-menu-submenu-title {
+  color: #000 !important;
+  display: flex !important;
+  align-items: center !important;
+}
+
+.ant-select-tree-node-selected {
+  background-color: #000 !important;
+  color: #fff !important;
 }

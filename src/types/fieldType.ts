@@ -1,3 +1,5 @@
+import {FormInstance} from "antd";
+
 type Rule = {
   required?: boolean;
   message?: string;
@@ -6,6 +8,19 @@ type Rule = {
 export type Option = {
   label: string;
   value: string | number | boolean;
+  children?: Option[];
+  title?: string;
+};
+
+export interface TreeNode {
+  title: string;
+  value: string;
+  children?: TreeNode[];
+}
+
+export type SelectOption = {
+  name: string;
+  options: Option[];
 };
 
 type BaseField = {
@@ -40,13 +55,42 @@ type CheckboxField = BaseField & {
   isFullWidth?: boolean;
 };
 
-export type Field = InputField | SelectField | RadioField | CheckboxField;
+type DatePickerField = BaseField & {
+  fieldType: "datePicker";
+};
+
+type EditorField = BaseField & {
+  fieldType: "editor";
+  content?: string;
+};
+
+type TextAreaField = BaseField & {
+  fieldType: "textArea";
+};
+
+type TreeSelectField = BaseField & {
+  fieldType: "treeSelect";
+  placeholder?: string;
+  options: TreeNode[];
+};
+
+export type Field =
+  | InputField
+  | SelectField
+  | RadioField
+  | CheckboxField
+  | DatePickerField
+  | EditorField
+  | TextAreaField
+  | TreeSelectField;
 
 export type FormField = {
   name: string;
   label: string;
   rules?: Rule[];
   initialValue?: string | number | boolean | string[];
+  dependencies?: string[];
+  hidden?: (form: FormInstance) => boolean;
   field: Field;
 };
 

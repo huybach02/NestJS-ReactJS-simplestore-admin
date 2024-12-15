@@ -1,37 +1,37 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import {Flex, Form, Table} from "antd";
+import {Form, Table} from "antd";
 import {Grid} from "antd";
 
 import {useDispatch, useSelector} from "react-redux";
 import {CustomModal} from "../components/CustomModal";
 import {useEffect, useState} from "react";
 
-import {CreateSupplierType, SupplierType} from "../types/supplierType";
-
 import {RootState} from "../redux/store";
 import {usePage} from "../hook/usePage";
 import {replaceName} from "../utils/replaceName";
-import {SupplierColumns} from "../columns/SupplierColumn";
-import RenderForm from "../components/forms/RenderForm";
 import TitlePage from "../components/TitlePage";
-import UploadSingleImage from "../components/UploadSingleImage";
-import {supplierForm} from "../form/supplierForm";
 import ExportForm from "../exportForm/ExportForm";
+import {CreateProductType} from "../types/productType";
 import {clearExportFields} from "../redux/slice/dataSlice";
+import {CategoryColumns} from "../columns/CategoryColumn";
+import {CategoryType} from "../types/categoryType";
+import {baseService} from "../service/baseService";
+import {handleTreeValue} from "../utils/handleTreeValue";
+import RenderForm from "../components/forms/RenderForm";
+import {categoryForm} from "../form/categoryForm";
 
-const endpoint = "suppliers";
-type DataType = SupplierType;
+const endpoint = "categories";
+type DataType = CategoryType;
 
-export const SupplierScreen = () => {
+export const CategoryScreen = () => {
   const dispatch = useDispatch();
 
   const {isLoading, isEditing, showModal, total} = useSelector(
     (state: RootState) => state.data
   );
 
-  const [photoUrl, setPhotoUrl] = useState<string>();
-
   const [itemSelected, setItemSelected] = useState<DataType>();
+  const [categories, setCategories] = useState<any[]>([]);
 
   const [items, setItems] = useState<DataType[]>([]);
 
@@ -53,31 +53,40 @@ export const SupplierScreen = () => {
     setItems,
   });
 
-  const columns = SupplierColumns({
+  const columns = CategoryColumns({
     dispatch,
     form,
     setItemSelected,
     handleGetData,
     endpoint,
+    categories,
   });
 
   useEffect(() => {
     if (!showModal) {
-      setPhotoUrl("");
       setItemSelected(undefined);
     }
+    fetchCategories();
   }, [showModal]);
 
-  const handleSubmit = (values: CreateSupplierType) => {
+  const handleSubmit = (values: CreateProductType) => {
     handleSubmitForm({
       ...values,
       slug: replaceName(values.name),
-      photoUrl: !isEditing ? photoUrl : photoUrl || itemSelected?.photoUrl,
     });
+  };
+
+  const fetchCategories = async () => {
+    const response = await baseService.findAll("categories", 1, 99999, {
+      active: true,
+    });
+
+    setCategories(handleTreeValue(response.data, "parentId"));
   };
 
   useEffect(() => {
     dispatch(clearExportFields());
+    fetchCategories();
   }, []);
 
   return (
@@ -110,31 +119,25 @@ export const SupplierScreen = () => {
         }}
         title={() => (
           <TitlePage
-            title="Suppliers"
+            title="Categories"
             endpoint={endpoint}
             formElement={<ExportForm endpoint={endpoint} />}
           />
         )}
       />
       <CustomModal
-        title={isEditing ? "Edit Supplier" : "Add new supplier"}
+        title={isEditing ? "Edit Category" : "Add new category"}
         form={form}
       >
-        <Flex
-          justify="center"
-          align="center"
-          gap={10}
-          style={{marginTop: "20px"}}
-        >
-          <UploadSingleImage
-            title="Avatar"
-            photoUrl={photoUrl}
-            setPhotoUrl={setPhotoUrl}
-            oldImage={itemSelected?.photoUrl}
-          />
-        </Flex>
         <RenderForm
-          fields={supplierForm()}
+          fields={categoryForm({
+            selectOptions: [
+              {
+                name: "categories",
+                options: categories,
+              },
+            ],
+          })}
           form={form}
           handleSubmit={handleSubmit}
         />

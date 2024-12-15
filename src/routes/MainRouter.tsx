@@ -2,12 +2,14 @@ import {Grid, Layout} from "antd";
 import HomeScreen from "../screens/HomeScreen";
 import {Sidebar} from "../components/Sidebar";
 import {Route, Routes} from "react-router-dom";
-import InventoryScreen from "../screens/InventoryScreen";
+
 import {ReportScreen} from "../screens/ReportScreen";
 import {SupplierScreen} from "../screens/SupplierScreen";
 import {OrderScreen} from "../screens/OrderScreen";
 import ManageStore from "../screens/ManageStore";
 import HeaderBar from "../components/HeaderBar";
+import {ProductScreen} from "../screens/ProductScreen";
+import {CategoryScreen} from "../screens/CategoryScreen";
 
 const {Content, Header} = Layout;
 
@@ -32,7 +34,8 @@ const MainRouter = () => {
         >
           <Routes>
             <Route path="/" element={<HomeScreen />} />
-            <Route path="/inventory" element={<InventoryScreen />} />
+            <Route path="/categories" element={<CategoryScreen />} />
+            <Route path="/products" element={<ProductScreen />} />
             <Route path="/report" element={<ReportScreen />} />
             <Route path="/supplier" element={<SupplierScreen />} />
             <Route path="/order" element={<OrderScreen />} />

@@ -9,10 +9,12 @@ export const CustomModal = ({
   title,
   children,
   form,
+  width = 700,
 }: {
   title: string;
   children: React.ReactNode;
   form: any;
+  width?: number;
 }) => {
   const dispatch = useDispatch();
 
@@ -31,7 +33,7 @@ export const CustomModal = ({
         dispatch(setCloseModal());
         form.resetFields();
       }}
-      width={700}
+      width={width}
       title={
         <Typography.Text style={{fontSize: "28px", fontWeight: "bold"}}>
           {title}

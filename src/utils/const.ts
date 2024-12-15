@@ -14,11 +14,11 @@ export const activeOptions: FormField = {
     options: [
       {
         label: "Active",
-        value: "Active",
+        value: true,
       },
       {
         label: "Inactive",
-        value: "Inactive",
+        value: false,
       },
     ],
     isButton: true,

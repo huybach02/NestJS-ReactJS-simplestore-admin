@@ -1,6 +1,17 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import {Checkbox, Form, Input, Radio, Select} from "antd";
+import {
+  Checkbox,
+  DatePicker,
+  Form,
+  Input,
+  Radio,
+  Select,
+  TreeSelect,
+} from "antd";
 import {Field, FormField} from "../../types/fieldType";
+import TextArea from "antd/es/input/TextArea";
+import QuillEditor from "../QuillEditor";
+import dayjs from "dayjs";
 
 type Props = {
   fields: FormField[];
@@ -9,20 +20,26 @@ type Props = {
 };
 
 const RenderForm = ({fields, form, handleSubmit}: Props) => {
-  const renderField = (field: FormField) => {
+  const renderField = (field: FormField, index: number) => {
+    if (field.hidden && field.hidden(form)) {
+      return null;
+    }
+
     return (
       <Form.Item
+        key={index}
         name={field.name}
         label={field.label}
         rules={field.rules}
         initialValue={field.initialValue}
+        dependencies={field.dependencies}
       >
-        {renderItem(field.field)}
+        {renderItem(field.field, field.name, index)}
       </Form.Item>
     );
   };
 
-  const renderItem = (item: Field) => {
+  const renderItem = (item: Field, fieldName: string, index: number) => {
     switch (item.fieldType) {
       case "input":
         return (
@@ -40,9 +57,9 @@ const RenderForm = ({fields, form, handleSubmit}: Props) => {
             allowClear
             maxCount={item.maxCount}
           >
-            {item.options.map((option: any) => {
+            {item.options.map((option: any, index) => {
               return (
-                <Select.Option value={option.value}>
+                <Select.Option value={option.value} key={index}>
                   {option.label}
                 </Select.Option>
               );
@@ -56,8 +73,12 @@ const RenderForm = ({fields, form, handleSubmit}: Props) => {
             buttonStyle="solid"
             style={{width: item.isFullWidth ? "100%" : "auto"}}
           >
-            {item.options.map((option: any) => {
-              return <Radio value={option.value}>{option.label}</Radio>;
+            {item.options.map((option: any, index) => {
+              return (
+                <Radio value={option.value} key={index}>
+                  {option.label}
+                </Radio>
+              );
             })}
           </Radio.Group>
         );
@@ -66,6 +87,37 @@ const RenderForm = ({fields, form, handleSubmit}: Props) => {
           <Checkbox.Group
             options={item.options}
             style={{width: item.isFullWidth ? "100%" : "auto"}}
+          />
+        );
+      case "datePicker":
+        return (
+          <DatePicker
+            style={{width: "100%"}}
+            placeholder={item.placeholder}
+            allowClear
+            value={
+              form.getFieldValue(fieldName)
+                ? dayjs(form.getFieldValue(fieldName))
+                : null
+            }
+          />
+        );
+      case "textArea":
+        return <TextArea rows={4} placeholder={item.placeholder} key={index} />;
+      case "editor":
+        return (
+          <QuillEditor
+            value={form.getFieldValue(fieldName)}
+            onChange={(value) => form.setFieldValue(fieldName, value)}
+          />
+        );
+      case "treeSelect":
+        return (
+          <TreeSelect
+            treeData={item.options}
+            placeholder="Please select"
+            allowClear
+            treeDefaultExpandAll
           />
         );
       default:
@@ -80,9 +132,9 @@ const RenderForm = ({fields, form, handleSubmit}: Props) => {
       style={{marginTop: "20px"}}
       form={form}
     >
-      {fields.map((field: any) => {
-        return renderField(field);
-      })}
+      <Form.Item noStyle shouldUpdate>
+        {() => <>{fields.map((field, index) => renderField(field, index))}</>}
+      </Form.Item>
     </Form>
   );
 };

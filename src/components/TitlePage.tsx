@@ -25,7 +25,7 @@ const TitlePage = ({
   return (
     <>
       <Row align="middle" justify="space-between">
-        <Col span={lg ? 3 : 24} style={{marginBottom: lg ? "" : "16px"}}>
+        <Col span={lg ? 5 : 24} style={{marginBottom: lg ? "" : "16px"}}>
           <Flex align="center" gap={10}>
             <Typography.Text
               style={{

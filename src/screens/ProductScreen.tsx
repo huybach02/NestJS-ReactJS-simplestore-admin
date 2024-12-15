@@ -1,28 +1,30 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import {Flex, Form, Table} from "antd";
+import {Flex, Form, message, Table} from "antd";
 import {Grid} from "antd";
 
 import {useDispatch, useSelector} from "react-redux";
 import {CustomModal} from "../components/CustomModal";
 import {useEffect, useState} from "react";
 
-import {CreateSupplierType, SupplierType} from "../types/supplierType";
-
 import {RootState} from "../redux/store";
 import {usePage} from "../hook/usePage";
 import {replaceName} from "../utils/replaceName";
-import {SupplierColumns} from "../columns/SupplierColumn";
 import RenderForm from "../components/forms/RenderForm";
 import TitlePage from "../components/TitlePage";
 import UploadSingleImage from "../components/UploadSingleImage";
-import {supplierForm} from "../form/supplierForm";
 import ExportForm from "../exportForm/ExportForm";
+import {productForm} from "../form/productForm";
+import {CreateProductType, ProductType} from "../types/productType";
+import {ProductColumns} from "../columns/ProductColumn";
 import {clearExportFields} from "../redux/slice/dataSlice";
+import {SupplierType} from "../types/supplierType";
+import {baseService} from "../service/baseService";
+import {handleTreeValue} from "../utils/handleTreeValue";
 
-const endpoint = "suppliers";
-type DataType = SupplierType;
+const endpoint = "products";
+type DataType = ProductType;
 
-export const SupplierScreen = () => {
+export const ProductScreen = () => {
   const dispatch = useDispatch();
 
   const {isLoading, isEditing, showModal, total} = useSelector(
@@ -32,6 +34,8 @@ export const SupplierScreen = () => {
   const [photoUrl, setPhotoUrl] = useState<string>();
 
   const [itemSelected, setItemSelected] = useState<DataType>();
+  const [suppliers, setSuppliers] = useState([]);
+  const [categories, setCategories] = useState<any[]>([]);
 
   const [items, setItems] = useState<DataType[]>([]);
 
@@ -53,31 +57,63 @@ export const SupplierScreen = () => {
     setItems,
   });
 
-  const columns = SupplierColumns({
+  const columns = ProductColumns({
     dispatch,
     form,
     setItemSelected,
     handleGetData,
     endpoint,
+    categories,
   });
 
   useEffect(() => {
     if (!showModal) {
       setPhotoUrl("");
       setItemSelected(undefined);
+    } else {
+      if (itemSelected && itemSelected.supplier && itemSelected.category) {
+        form.setFieldValue("supplier", itemSelected.supplier._id);
+        form.setFieldValue("category", itemSelected.category?._id);
+      }
     }
-  }, [showModal]);
+  }, [showModal, itemSelected, form]);
 
-  const handleSubmit = (values: CreateSupplierType) => {
+  const handleSubmit = (values: CreateProductType) => {
+    if (!isEditing && !photoUrl) {
+      message.error("Please upload thumbnail");
+      return;
+    }
+
     handleSubmitForm({
       ...values,
       slug: replaceName(values.name),
-      photoUrl: !isEditing ? photoUrl : photoUrl || itemSelected?.photoUrl,
+      thumbnail: !isEditing ? photoUrl : photoUrl || itemSelected?.thumbnail,
+      saleStartDate: values.saleStartDate?.startOf("day").format() || null,
+      saleEndDate: values.saleEndDate?.endOf("day").format() || null,
     });
+  };
+
+  const fetchSuppliersAndCategories = async () => {
+    const [suppliersResponse, categoriesResponse] = await Promise.all([
+      baseService.findAll("suppliers", 1, 99999, {
+        active: true,
+      }),
+      baseService.findAll("categories", 1, 99999, {
+        active: true,
+      }),
+    ]);
+    setSuppliers(
+      suppliersResponse.data.map((supplier: SupplierType) => ({
+        label: supplier.name,
+        value: supplier._id,
+      }))
+    );
+    setCategories(handleTreeValue(categoriesResponse.data, "parentId"));
   };
 
   useEffect(() => {
     dispatch(clearExportFields());
+    fetchSuppliersAndCategories();
   }, []);
 
   return (
@@ -110,15 +146,16 @@ export const SupplierScreen = () => {
         }}
         title={() => (
           <TitlePage
-            title="Suppliers"
+            title="Products"
             endpoint={endpoint}
             formElement={<ExportForm endpoint={endpoint} />}
           />
         )}
       />
       <CustomModal
-        title={isEditing ? "Edit Supplier" : "Add new supplier"}
+        title={isEditing ? "Edit Product" : "Add new product"}
         form={form}
+        width={1000}
       >
         <Flex
           justify="center"
@@ -127,14 +164,25 @@ export const SupplierScreen = () => {
           style={{marginTop: "20px"}}
         >
           <UploadSingleImage
-            title="Avatar"
+            title="Thumbnail"
             photoUrl={photoUrl}
             setPhotoUrl={setPhotoUrl}
-            oldImage={itemSelected?.photoUrl}
+            oldImage={itemSelected?.thumbnail}
           />
         </Flex>
         <RenderForm
-          fields={supplierForm()}
+          fields={productForm({
+            selectOptions: [
+              {
+                name: "suppliers",
+                options: suppliers,
+              },
+              {
+                name: "categories",
+                options: categories,
+              },
+            ],
+          })}
           form={form}
           handleSubmit={handleSubmit}
         />

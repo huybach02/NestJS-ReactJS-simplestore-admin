@@ -3,12 +3,12 @@ import AuthRouter from "./AuthRouter";
 import MainRouter from "./MainRouter";
 import {RootState} from "../redux/store";
 import {useEffect, useState} from "react";
-// import {User} from "../types/userType";
+import {User} from "../types/userType";
 import {Loading} from "../components/Loading";
 import {message} from "antd";
 
 export const Routers = () => {
-  // const [data, setData] = useState<User | null>(null);
+  const [data, setData] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   const {user} = useSelector((state: RootState) => state.user);
@@ -18,9 +18,9 @@ export const Routers = () => {
     setIsLoading(true);
     if (user) {
       if (user.role === "admin") {
-        // setData(user);
+        setData(user);
       } else {
-        // setData(null);
+        setData(null);
         message.error("You are not authorized to access this page");
       }
       timeout = setTimeout(() => {
@@ -28,7 +28,7 @@ export const Routers = () => {
       }, 2000);
     } else {
       timeout = setTimeout(() => {
-        // setData(null);
+        setData(null);
         setIsLoading(false);
       }, 2000);
     }
@@ -36,5 +36,5 @@ export const Routers = () => {
     return () => clearTimeout(timeout);
   }, [user]);
 
-  return isLoading ? <Loading /> : user ? <MainRouter /> : <AuthRouter />;
+  return isLoading ? <Loading /> : data ? <MainRouter /> : <AuthRouter />;
 };
