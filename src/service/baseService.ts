@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import {message} from "antd";
 import axiosInstance from "../config/axios";
-import {CreateSupplierType} from "../types/supplierType";
 import {CategoryType} from "../types/categoryType";
 
 export const baseService = {
@@ -29,6 +28,10 @@ export const baseService = {
     }
   },
 
+  findAllVariants: async (endpoint: string, productId: string) => {
+    return await axiosInstance.get(`${endpoint}?productId=${productId}`);
+  },
+
   getCategoriesBySuperCategory: async (superCategoryId: string) => {
     const response = await axiosInstance.get(
       `categories/by-super-category/${superCategoryId}`
@@ -40,7 +43,7 @@ export const baseService = {
     }));
   },
 
-  create: async (endpoint: string, data: CreateSupplierType) => {
+  create: async (endpoint: string, data: any) => {
     try {
       return await axiosInstance.post(`${endpoint}`, data);
     } catch (error: any) {
@@ -48,7 +51,7 @@ export const baseService = {
       return Promise.reject(error);
     }
   },
-  update: async (endpoint: string, id: string, data: CreateSupplierType) => {
+  update: async (endpoint: string, id: string, data: any) => {
     try {
       return await axiosInstance.patch(`${endpoint}/${id}`, data);
     } catch (error: any) {
@@ -72,5 +75,8 @@ export const baseService = {
       message.error(error.response.data.message);
       return Promise.reject(error);
     }
+  },
+  actionWhenSelected: async (endpoint: string, data: any) => {
+    return await axiosInstance.post(`${endpoint}/action-when-selected`, data);
   },
 };

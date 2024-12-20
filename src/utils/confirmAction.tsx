@@ -6,10 +6,9 @@ const {confirm} = Modal;
 
 const confirmAction = (promise: any) => {
   confirm({
-    title: "Do you want to delete these items?",
+    title: "Do you want to perform this action?",
     icon: <ExclamationCircleFilled />,
-    content:
-      "When clicked the OK button, this action will be permanently deleted.",
+    content: "When clicked the OK button, this action will be performed.",
     onOk() {
       promise();
     },

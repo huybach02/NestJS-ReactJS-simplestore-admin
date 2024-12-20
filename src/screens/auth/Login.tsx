@@ -69,6 +69,7 @@ const Login = () => {
             name="email"
             label="Email"
             rules={[{required: true, message: "Email is required"}]}
+            initialValue={"bach@gmail.com"}
           >
             <Input placeholder="example@gmail.com" />
           </Form.Item>
@@ -76,6 +77,7 @@ const Login = () => {
             name="password"
             label="Password"
             rules={[{required: true, message: "Password is required"}]}
+            initialValue={"password"}
           >
             <Input.Password placeholder="********" />
           </Form.Item>

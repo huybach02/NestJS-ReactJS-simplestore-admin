@@ -52,6 +52,30 @@ export const productForm = ({
       },
     },
     {
+      name: "hasVariant",
+      label: "Has Variant ?",
+      rules: [
+        {
+          required: true,
+        },
+      ],
+      field: {
+        fieldType: "radio",
+        options: [
+          {
+            label: "Yes",
+            value: true,
+          },
+          {
+            label: "No",
+            value: false,
+          },
+        ],
+        isButton: true,
+        isFullWidth: true,
+      },
+    },
+    {
       name: "originalPrice",
       label: "Original Price",
       rules: [
@@ -59,11 +83,46 @@ export const productForm = ({
           required: true,
         },
       ],
+      dependencies: ["hasVariant"],
+      hidden: (form) => {
+        if (form.getFieldValue("hasVariant") === true) {
+          return true;
+        } else if (form.getFieldValue("hasVariant") === false) {
+          return false;
+        } else {
+          return true;
+        }
+      },
       field: {
         fieldType: "input",
         placeholder: "Enter Original Price",
         allowClear: true,
         type: "number",
+      },
+    },
+    {
+      name: "quantity",
+      label: "Quantity",
+      rules: [
+        {
+          required: true,
+        },
+      ],
+      dependencies: ["hasVariant"],
+      hidden: (form) => {
+        if (form.getFieldValue("hasVariant") === true) {
+          return true;
+        } else if (form.getFieldValue("hasVariant") === false) {
+          return false;
+        } else {
+          return true;
+        }
+      },
+      field: {
+        fieldType: "input",
+        type: "number",
+        placeholder: "Enter Quantity",
+        allowClear: true,
       },
     },
     {
@@ -74,6 +133,16 @@ export const productForm = ({
           required: true,
         },
       ],
+      dependencies: ["hasVariant"],
+      hidden: (form) => {
+        if (form.getFieldValue("hasVariant") === true) {
+          return true;
+        } else if (form.getFieldValue("hasVariant") === false) {
+          return false;
+        } else {
+          return true;
+        }
+      },
       field: {
         fieldType: "radio",
         options: [
@@ -98,8 +167,9 @@ export const productForm = ({
           required: true,
         },
       ],
-      dependencies: ["hasSale"],
-      hidden: (form) => !form.getFieldValue("hasSale"),
+      dependencies: ["hasSale", "hasVariant"],
+      hidden: (form) =>
+        !form.getFieldValue("hasSale") || form.getFieldValue("hasVariant"),
       field: {
         fieldType: "radio",
         options: [
@@ -124,8 +194,9 @@ export const productForm = ({
           required: true,
         },
       ],
-      dependencies: ["hasSale"],
-      hidden: (form) => !form.getFieldValue("hasSale"),
+      dependencies: ["hasSale", "hasVariant"],
+      hidden: (form) =>
+        !form.getFieldValue("hasSale") || form.getFieldValue("hasVariant"),
       field: {
         fieldType: "input",
         type: "number",
@@ -141,8 +212,9 @@ export const productForm = ({
           required: true,
         },
       ],
-      dependencies: ["hasSale"],
-      hidden: (form) => !form.getFieldValue("hasSale"),
+      dependencies: ["hasSale", "hasVariant"],
+      hidden: (form) =>
+        !form.getFieldValue("hasSale") || form.getFieldValue("hasVariant"),
       field: {
         fieldType: "datePicker",
         placeholder: "Select start date",
@@ -156,26 +228,12 @@ export const productForm = ({
           required: true,
         },
       ],
-      dependencies: ["hasSale"],
-      hidden: (form) => !form.getFieldValue("hasSale"),
+      dependencies: ["hasSale", "hasVariant"],
+      hidden: (form) =>
+        !form.getFieldValue("hasSale") || form.getFieldValue("hasVariant"),
       field: {
         fieldType: "datePicker",
         placeholder: "Select end date",
-      },
-    },
-    {
-      name: "quantity",
-      label: "Quantity",
-      rules: [
-        {
-          required: true,
-        },
-      ],
-      field: {
-        fieldType: "input",
-        type: "number",
-        placeholder: "Enter Quantity",
-        allowClear: true,
       },
     },
     {

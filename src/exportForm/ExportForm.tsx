@@ -53,7 +53,6 @@ const ExportForm = ({endpoint}: {endpoint: string}) => {
     <div style={{marginTop: 30}}>
       <Space size={16}>
         <Flex align="center" gap={10}>
-          <Typography.Text>Date</Typography.Text>
           <DatePicker.RangePicker
             onChange={(value) => {
               if (value && value[0] && value[1]) {

@@ -4,12 +4,16 @@ import {useEffect, useState} from "react";
 import type {UploadProps} from "antd";
 import {message, Upload, Button} from "antd";
 import {UploadOutlined} from "@ant-design/icons";
+import {useDispatch} from "react-redux";
+import {setSingleImageUploaded} from "../redux/slice/dataSlice";
 
 type ImageUploadProps = {
   setImage: any;
 };
 
 const ImageUploadButton = ({setImage}: ImageUploadProps) => {
+  const dispatch = useDispatch();
+
   const [imageUrl, setImageUrl] = useState<string>();
 
   const props: UploadProps = {
@@ -39,6 +43,7 @@ const ImageUploadButton = ({setImage}: ImageUploadProps) => {
 
         const result = await response.json();
         onSuccess?.(result);
+        dispatch(setSingleImageUploaded({publicId: result.public_id}));
         // Thêm URL mới vào state
         setImageUrl(result.secure_url);
         message.success(`${filename} uploaded successfully`);

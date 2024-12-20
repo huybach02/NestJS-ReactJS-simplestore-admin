@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import {Avatar, Badge, Button, Flex, Tooltip, Tree} from "antd";
+import {Avatar, Badge, Button, Flex, Tooltip, Tree, Typography} from "antd";
 import {FaCaretRight, FaImage} from "react-icons/fa";
 import {FiEdit, FiTrash} from "react-icons/fi";
 import {ColumnProps} from "antd/es/table";
@@ -7,6 +7,8 @@ import {formatMoney} from "../utils/formatMoney";
 import {
   setIsConfirm,
   setIsEditing,
+  setProductSelected,
+  setShowDrawer,
   setShowModal,
 } from "../redux/slice/dataSlice";
 import confirmAction from "../utils/confirmAction";
@@ -14,6 +16,7 @@ import {baseService} from "../service/baseService";
 import {ProductType} from "../types/productType";
 import dayjs from "dayjs";
 import {createTreeCategoryByCurrentId} from "../utils/handleTreeValue";
+import {LiaSitemapSolid} from "react-icons/lia";
 
 interface Props {
   dispatch: any;
@@ -43,13 +46,15 @@ export const ProductColumns = ({
       dataIndex: "thumbnail",
       key: "thumbnail",
       render: (photoUrl) => (
-        <Avatar src={photoUrl} shape="square" size={50} icon={<FaImage />} />
+        <Avatar src={photoUrl} shape="square" size={60} icon={<FaImage />} />
       ),
+      width: 100,
     },
     {
       title: "Product Name",
       dataIndex: "name",
       key: "name",
+      width: 230,
     },
     {
       title: "SKU",
@@ -66,47 +71,98 @@ export const ProductColumns = ({
       title: "Category",
       dataIndex: "category",
       key: "category",
+      minWidth: 100,
       render: (value) => {
-        const treeCategory = createTreeCategoryByCurrentId(
-          categories,
-          value.id
-        );
-        console.log(treeCategory);
-        return treeCategory.length > 0 ? (
-          <Tree
-            showLine
-            switcherIcon={<FaCaretRight size={18} />}
-            defaultExpandAll={true}
-            treeData={treeCategory}
-          />
-        ) : null;
+        if (value) {
+          const treeCategory = createTreeCategoryByCurrentId(
+            categories,
+            value.id
+          );
+          return treeCategory.length > 0 ? (
+            <Tree
+              showLine
+              switcherIcon={<FaCaretRight size={18} />}
+              defaultExpandAll={true}
+              treeData={treeCategory}
+            />
+          ) : null;
+        }
+        return "------";
       },
     },
     {
-      title: "Original Price",
+      title: "Buying Price",
       dataIndex: "originalPrice",
       key: "originalPrice",
-      render: (price) => formatMoney(price),
-      sorter: (a, b) => Number(a.originalPrice) - Number(b.originalPrice),
+      render: (price, record) => {
+        if (record.hasVariant) {
+          return (
+            <Badge
+              className="site-badge-count-109"
+              count={"Has Variant"}
+              style={{backgroundColor: "#389e0d"}}
+            />
+          );
+        } else {
+          if (record.hasSale) {
+            return (
+              <Flex align="center" gap={10}>
+                <Typography.Text delete>{formatMoney(price)}</Typography.Text>{" "}
+                <Typography.Text>
+                  {formatMoney(record.salePrice!)}
+                </Typography.Text>
+              </Flex>
+            );
+          } else {
+            return <Typography.Text>{formatMoney(price)}</Typography.Text>;
+          }
+        }
+      },
+      minWidth: 100,
     },
-    {
-      title: "Sale Price",
-      dataIndex: "salePrice",
-      key: "salePrice",
-      render: (price) => (price ? formatMoney(price) : "--"),
-      sorter: (a, b) => Number(a.salePrice) - Number(b.salePrice),
-    },
+    // {
+    //   title: "Sale Price",
+    //   dataIndex: "salePrice",
+    //   key: "salePrice",
+    //   render: (price) => (price ? formatMoney(price) : "--"),
+    //   sorter: (a, b) => Number(a.salePrice) - Number(b.salePrice),
+    //   minWidth: 100,
+    // },
     {
       title: "Has Sale",
       dataIndex: "hasSale",
       key: "hasSale",
-      render: (hasSale) => (
-        <Badge
-          className="site-badge-count-109"
-          count={hasSale ? "Sale" : "Not Sale"}
-          style={{backgroundColor: hasSale ? "#389e0d" : "red"}}
-        />
-      ),
+      render: (hasSale, record) => {
+        const variantSales = record.variants.filter(
+          (variant) => variant.hasSale
+        );
+        return (
+          <Badge
+            className="site-badge-count-109"
+            count={
+              !record.hasVariant
+                ? hasSale
+                  ? "Sale"
+                  : "Not Sale"
+                : `${variantSales.length} Variant Sale`
+            }
+            style={{
+              backgroundColor: !record.hasVariant
+                ? hasSale
+                  ? "#389e0d"
+                  : "red"
+                : "#ff9900",
+            }}
+          />
+        );
+      },
+    },
+    {
+      title: "Total Quantity",
+      dataIndex: "quantity",
+      key: "quantity",
+      sorter: (a, b) => Number(a.quantity) - Number(b.quantity),
+      minWidth: 100,
     },
     {
       title: "Active",
@@ -125,6 +181,7 @@ export const ProductColumns = ({
       dataIndex: "",
       key: "action",
       fixed: "right",
+      width: 150,
       render: (record) => (
         <Flex gap={10}>
           <Tooltip title="Edit">
@@ -167,6 +224,27 @@ export const ProductColumns = ({
               <FiTrash size={14} />
             </Button>
           </Tooltip>
+          {record.hasVariant && (
+            <Tooltip title="Variants">
+              <Button
+                size="small"
+                type="default"
+                style={{height: "27px"}}
+                onClick={() => {
+                  dispatch(setShowDrawer());
+                  dispatch(
+                    setProductSelected({
+                      id: record._id as string,
+                      name: record.name,
+                      sku: record.sku,
+                    })
+                  );
+                }}
+              >
+                <LiaSitemapSolid size={20} />
+              </Button>
+            </Tooltip>
+          )}
         </Flex>
       ),
     },

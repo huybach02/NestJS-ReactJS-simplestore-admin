@@ -16,9 +16,16 @@ type Props = {
   form: any;
   itemSelected: any;
   setItems: any;
+  filter?: any;
 };
 
-export const usePage = ({endpoint, form, itemSelected, setItems}: Props) => {
+export const usePage = ({
+  endpoint,
+  form,
+  itemSelected,
+  setItems,
+  filter,
+}: Props) => {
   const dispatch = useDispatch();
 
   const {isEditing} = useSelector((state: RootState) => state.data);
@@ -30,13 +37,22 @@ export const usePage = ({endpoint, form, itemSelected, setItems}: Props) => {
     searchParams.get("limit") || 10
   );
 
+  if (filter) {
+    Object.keys(filter).forEach((key) => {
+      if (filter[key] === "") {
+        delete filter[key];
+      }
+    });
+  }
+
   useEffect(() => {
     setSearchParams({
       page: currentPage.toString(),
       limit: currentLimit.toString(),
+      ...filter,
     });
-    handleGetData(+currentPage, +currentLimit);
-  }, [currentPage, currentLimit]);
+    handleGetData(+currentPage, +currentLimit, filter);
+  }, [currentPage, currentLimit, filter]);
 
   const handleSubmitForm = async (data: any) => {
     try {
@@ -55,12 +71,12 @@ export const usePage = ({endpoint, form, itemSelected, setItems}: Props) => {
         dispatch(setCloseModal());
         form.resetFields();
         if (isEditing) {
-          handleGetData(+currentPage, +currentLimit);
+          handleGetData(+currentPage, +currentLimit, filter);
         } else {
           if (+currentPage > 1) {
             setCurrentPage(1);
           } else {
-            handleGetData(+currentPage, +currentLimit);
+            handleGetData(+currentPage, +currentLimit, filter);
           }
         }
         dispatch(setIsEditing(false));
@@ -74,11 +90,12 @@ export const usePage = ({endpoint, form, itemSelected, setItems}: Props) => {
 
   const handleGetData = async (
     page: number = +currentPage,
-    limit: number = +currentLimit
+    limit: number = +currentLimit,
+    filter: any = {}
   ) => {
     try {
       dispatch(setIsLoading(true));
-      const response = await baseService.findAll(endpoint, page, limit);
+      const response = await baseService.findAll(endpoint, page, limit, filter);
       if (response) {
         setItems(response.data);
         dispatch(setTotal(response.total));

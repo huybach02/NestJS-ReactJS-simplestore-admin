@@ -91,3 +91,21 @@ h6 {
   background-color: #000 !important;
   color: #fff !important;
 }
+.ant-tree-node-selected {
+  background-color: #fff !important;
+  color: #000 !important;
+}
+
+:where(.css-dev-only-do-not-override-98i6hw).ant-table-wrapper
+  .ant-table-tbody
+  .ant-table-row.ant-table-row-selected
+  > .ant-table-cell {
+  background-color: #e5e5e5 !important;
+}
+
+:where(.css-dev-only-do-not-override-98i6hw).ant-table-wrapper
+  .ant-table-tbody
+  .ant-table-row.ant-table-row-selected
+  .ant-tree-list-holder-inner {
+  background-color: #e5e5e5 !important;
+}

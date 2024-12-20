@@ -1,23 +1,35 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import {useEffect, useState} from "react";
 import {InboxOutlined} from "@ant-design/icons";
 import type {UploadProps} from "antd";
-import {message, Upload, Image} from "antd";
+import {message, Upload, Image, Flex, Button} from "antd";
+import {FiTrash2} from "react-icons/fi";
+import {setMultipleImageUploaded} from "../redux/slice/dataSlice";
+import {useDispatch, useSelector} from "react-redux";
+import {deleteImage} from "../utils/deleteImageCloudinary";
+import {RootState} from "../redux/store";
 
 const {Dragger} = Upload;
 
 type ImageUploadProps = {
+  title?: string;
   multiple?: boolean | undefined;
   setImageLists: any;
   width?: string;
+  style?: React.CSSProperties;
+  imageLists?: string[];
 };
 
 const ImageUploadZone = ({
+  title,
   setImageLists,
   multiple = false,
   width,
+  style,
+  imageLists,
 }: ImageUploadProps) => {
-  const [imageUrls, setImageUrls] = useState<string[]>([]);
+  const dispatch = useDispatch();
+
+  const {isEditing} = useSelector((state: RootState) => state.data);
 
   const props: UploadProps = {
     name: "file",
@@ -42,7 +54,8 @@ const ImageUploadZone = ({
         const result = await response.json();
         onSuccess?.(result);
         // Thêm URL mới vào state
-        setImageUrls((prev) => [...prev, result.secure_url]);
+        setImageLists((prev: any) => [...prev, result.secure_url]);
+        dispatch(setMultipleImageUploaded({publicId: result.public_id}));
         message.success(`${filename} uploaded successfully`);
       } catch (error) {
         onError?.(error as Error);
@@ -58,19 +71,21 @@ const ImageUploadZone = ({
     onDrop(e) {
       console.log("Dropped files", e.dataTransfer.files);
     },
-    onRemove: (file) => {
-      setImageUrls((prev) =>
-        prev.filter((url) => url !== file.response.secure_url)
-      );
+    onRemove: async (file) => {
+      await deleteImage(file.response.public_id);
+      handleRemoveImage(file.response.secure_url);
     },
   };
 
-  useEffect(() => {
-    setImageLists(imageUrls);
-  }, [imageUrls]);
+  const handleRemoveImage = (url: string) => {
+    setImageLists((prev: any) => prev.filter((u: any) => u !== url));
+  };
 
   return (
-    <div>
+    <div style={style}>
+      <div style={{fontSize: 14, fontWeight: 500, marginBottom: 10}}>
+        {title}
+      </div>
       <Dragger {...props} style={width ? {width: width} : {}}>
         <p className="ant-upload-drag-icon">
           <InboxOutlined />
@@ -79,19 +94,29 @@ const ImageUploadZone = ({
       </Dragger>
 
       {/* Phần preview ảnh */}
-      {imageUrls.length > 0 && (
+      {imageLists && imageLists.length > 0 && (
         <div style={{marginTop: 20}}>
-          <h3>Uploaded Images:</h3>
+          <h3 style={{fontSize: 16, fontWeight: 500, marginBottom: 10}}>
+            Uploaded Images:
+          </h3>
           <Image.PreviewGroup>
             <div style={{display: "flex", gap: 8, flexWrap: "wrap"}}>
-              {imageUrls.map((url, index) => (
-                <Image
-                  key={index}
-                  src={url}
-                  width={100}
-                  height={100}
-                  style={{objectFit: "cover"}}
-                />
+              {imageLists?.map((url, index) => (
+                <Flex key={index} vertical align="center" gap={10}>
+                  <Image
+                    src={url}
+                    width={100}
+                    height={100}
+                    style={{objectFit: "cover", borderRadius: 10}}
+                  />
+                  {isEditing && (
+                    <Button
+                      icon={<FiTrash2 />}
+                      danger
+                      onClick={() => handleRemoveImage(url)}
+                    />
+                  )}
+                </Flex>
               ))}
             </div>
           </Image.PreviewGroup>

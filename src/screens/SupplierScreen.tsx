@@ -18,12 +18,17 @@ import UploadSingleImage from "../components/UploadSingleImage";
 import {supplierForm} from "../form/supplierForm";
 import ExportForm from "../exportForm/ExportForm";
 import {clearExportFields} from "../redux/slice/dataSlice";
+import {TableRowSelection} from "antd/es/table/interface";
+import {FilterGroup} from "../components/FilterGroup";
+import {useSearchParams} from "react-router-dom";
 
 const endpoint = "suppliers";
 type DataType = SupplierType;
 
 export const SupplierScreen = () => {
   const dispatch = useDispatch();
+
+  const [searchParams] = useSearchParams();
 
   const {isLoading, isEditing, showModal, total} = useSelector(
     (state: RootState) => state.data
@@ -32,6 +37,12 @@ export const SupplierScreen = () => {
   const [photoUrl, setPhotoUrl] = useState<string>();
 
   const [itemSelected, setItemSelected] = useState<DataType>();
+  const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
+  const [filter, setFilter] = useState({
+    search: searchParams.get("search") || "",
+    sort: searchParams.get("sort") || "createdAt_desc",
+    active: searchParams.get("active") || "",
+  });
 
   const [items, setItems] = useState<DataType[]>([]);
 
@@ -51,6 +62,7 @@ export const SupplierScreen = () => {
     form,
     itemSelected,
     setItems,
+    filter,
   });
 
   const columns = SupplierColumns({
@@ -80,8 +92,19 @@ export const SupplierScreen = () => {
     dispatch(clearExportFields());
   }, []);
 
+  const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
+    console.log("selectedRowKeys changed: ", newSelectedRowKeys);
+    setSelectedRowKeys(newSelectedRowKeys);
+  };
+
+  const rowSelection: TableRowSelection<DataType> = {
+    selectedRowKeys,
+    onChange: onSelectChange,
+  };
+
   return (
     <div>
+      <FilterGroup filter={filter} setFilter={setFilter} />
       <Table
         dataSource={items}
         columns={columns}
@@ -96,7 +119,7 @@ export const SupplierScreen = () => {
           position: ["bottomCenter"],
           showSizeChanger: true,
           defaultPageSize: 10,
-          pageSizeOptions: ["10", "20", "30", "50", "100"],
+          pageSizeOptions: ["10", "20", "30", "50", "100", "1000"],
           onShowSizeChange(_, pageSize) {
             setCurrentLimit(pageSize);
           },
@@ -113,12 +136,17 @@ export const SupplierScreen = () => {
             title="Suppliers"
             endpoint={endpoint}
             formElement={<ExportForm endpoint={endpoint} />}
+            selectedRowKeys={selectedRowKeys}
+            setSelectedRowKeys={setSelectedRowKeys}
+            handleGetData={handleGetData}
           />
         )}
+        rowSelection={rowSelection}
       />
       <CustomModal
         title={isEditing ? "Edit Supplier" : "Add new supplier"}
         form={form}
+        width={500}
       >
         <Flex
           justify="center"

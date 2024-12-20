@@ -10,11 +10,11 @@ export const categoryForm = ({
   return [
     {
       name: "parentId",
-      label: "Parent Category",
+      label: "Parent Category (Optional)",
       rules: [
-        {
-          required: true,
-        },
+        // {
+        //   required: true,
+        // },
       ],
       field: {
         fieldType: "treeSelect",

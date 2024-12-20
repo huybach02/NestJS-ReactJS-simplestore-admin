@@ -10,8 +10,10 @@ export const handleTreeValue = (data: any[], key: string) => {
       .map((item) => {
         const children = buildTree(item._id);
         const node = {
+          key: item._id,
           title: item.name,
           value: item._id,
+          ...item,
         };
 
         if (children.length > 0) {
@@ -25,6 +27,18 @@ export const handleTreeValue = (data: any[], key: string) => {
   const result = buildTree(null);
 
   return result;
+};
+
+export const calculateTotalProducts = (category: any): number => {
+  let total = category.productCount || 0;
+
+  if (category.children && category.children.length > 0) {
+    category.children.forEach((child: any) => {
+      total += calculateTotalProducts(child);
+    });
+  }
+
+  return total;
 };
 
 interface TreeNode {

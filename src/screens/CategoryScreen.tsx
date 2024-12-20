@@ -26,13 +26,14 @@ type DataType = CategoryType;
 export const CategoryScreen = () => {
   const dispatch = useDispatch();
 
-  const {isLoading, isEditing, showModal, total} = useSelector(
+  const {isLoading, isEditing, showModal} = useSelector(
     (state: RootState) => state.data
   );
 
   const [itemSelected, setItemSelected] = useState<DataType>();
   const [categories, setCategories] = useState<any[]>([]);
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [items, setItems] = useState<DataType[]>([]);
 
   const [form] = Form.useForm();
@@ -42,10 +43,10 @@ export const CategoryScreen = () => {
   const {
     handleSubmitForm,
     handleGetData,
-    currentPage,
-    currentLimit,
-    setCurrentPage,
-    setCurrentLimit,
+    // currentPage,
+    // currentLimit,
+    // setCurrentPage,
+    // setCurrentLimit,
   } = usePage({
     endpoint,
     form,
@@ -92,7 +93,7 @@ export const CategoryScreen = () => {
   return (
     <div>
       <Table
-        dataSource={items}
+        dataSource={categories}
         columns={columns}
         loading={isLoading}
         rowKey="_id"
@@ -100,23 +101,24 @@ export const CategoryScreen = () => {
           x: "max-content",
           y: `calc(100vh - ${lg ? "320px" : "120px"})`,
         }}
-        pagination={{
-          responsive: true,
-          position: ["bottomCenter"],
-          showSizeChanger: true,
-          defaultPageSize: 10,
-          pageSizeOptions: ["10", "20", "30", "50", "100"],
-          onShowSizeChange(_, pageSize) {
-            setCurrentLimit(pageSize);
-          },
-          onChange(page) {
-            setCurrentPage(page);
-          },
-          total: total,
-          current: +currentPage,
-          pageSize: +currentLimit,
-          showQuickJumper: true,
-        }}
+        pagination={false}
+        // pagination={{
+        //   responsive: true,
+        //   position: ["bottomCenter"],
+        //   showSizeChanger: true,
+        //   defaultPageSize: 10,
+        //   pageSizeOptions: ["10", "20", "30", "50", "100"],
+        //   onShowSizeChange(_, pageSize) {
+        //     setCurrentLimit(pageSize);
+        //   },
+        //   onChange(page) {
+        //     setCurrentPage(page);
+        //   },
+        //   total: total,
+        //   current: +currentPage,
+        //   pageSize: +currentLimit,
+        //   showQuickJumper: true,
+        // }}
         title={() => (
           <TitlePage
             title="Categories"
@@ -128,6 +130,7 @@ export const CategoryScreen = () => {
       <CustomModal
         title={isEditing ? "Edit Category" : "Add new category"}
         form={form}
+        width={500}
       >
         <RenderForm
           fields={categoryForm({
