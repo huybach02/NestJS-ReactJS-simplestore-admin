@@ -34,7 +34,7 @@ export const CategoryScreen = () => {
   const [categories, setCategories] = useState<any[]>([]);
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [items, setItems] = useState<DataType[]>([]);
+  const [_items, setItems] = useState<DataType[]>([]);
 
   const [form] = Form.useForm();
 
