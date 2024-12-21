@@ -112,7 +112,7 @@ export const SupplierScreen = () => {
         rowKey="_id"
         scroll={{
           x: "max-content",
-          y: `calc(100vh - ${lg ? "320px" : "120px"})`,
+          y: `calc(100vh - ${lg ? "360px" : "130px"})`,
         }}
         pagination={{
           responsive: true,

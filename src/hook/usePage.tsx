@@ -1,9 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import {useDispatch, useSelector} from "react-redux";
 import {
+  clearMultipleImageUploaded,
   setCloseModal,
   setIsEditing,
   setIsLoading,
+  setSingleImageUploaded,
   setTotal,
 } from "../redux/slice/dataSlice";
 import {RootState} from "../redux/store";
@@ -80,6 +82,8 @@ export const usePage = ({
           }
         }
         dispatch(setIsEditing(false));
+        dispatch(clearMultipleImageUploaded());
+        dispatch(setSingleImageUploaded({publicId: ""}));
       }
     } catch (error) {
       console.log(error);
