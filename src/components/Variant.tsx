@@ -38,38 +38,44 @@ const Variant = () => {
   );
 
   const handleSubmit = async (values: CreateProductVariantType) => {
-    setIsLoading(true);
-    let response;
-    if (!variantSelected) {
-      response = await baseService.create("product-variants", {
-        ...values,
-        thumbnail: photoUrl,
-        saleStartDate: values.saleStartDate?.startOf("day").format() || null,
-        saleEndDate: values.saleEndDate?.endOf("day").format() || null,
-        productId: productSelected.id,
-      });
-    } else {
-      response = await baseService.update(
-        "product-variants",
-        variantSelected._id,
-        {
+    try {
+      setIsLoading(true);
+      let response;
+      if (!variantSelected) {
+        response = await baseService.create("product-variants", {
           ...values,
           thumbnail: photoUrl,
           saleStartDate: values.saleStartDate?.startOf("day").format() || null,
           saleEndDate: values.saleEndDate?.endOf("day").format() || null,
           productId: productSelected.id,
-        }
-      );
-    }
-    if (response?.success) {
-      if (variantSelected?.thumbnail) {
-        await deleteImage(convertUrlToPublicId(variantSelected.thumbnail));
+        });
+      } else {
+        response = await baseService.update(
+          "product-variants",
+          variantSelected._id,
+          {
+            ...values,
+            thumbnail: photoUrl,
+            saleStartDate:
+              values.saleStartDate?.startOf("day").format() || null,
+            saleEndDate: values.saleEndDate?.endOf("day").format() || null,
+            productId: productSelected.id,
+          }
+        );
       }
-      form.resetFields();
-      setVariantSelected(undefined);
-      setPhotoUrl("");
-      setIsModalOpen(false);
-      fetchVariants(productSelected.id);
+      if (response?.success) {
+        if (variantSelected?.thumbnail) {
+          await deleteImage(convertUrlToPublicId(variantSelected.thumbnail));
+        }
+        form.resetFields();
+        setVariantSelected(undefined);
+        setPhotoUrl("");
+        setIsModalOpen(false);
+        fetchVariants(productSelected.id);
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
       setIsLoading(false);
     }
   };
@@ -117,6 +123,8 @@ const Variant = () => {
       setPhotoUrl("");
     }
   }, [isModalOpen, variantSelected]);
+
+  console.log(isLoading);
 
   return (
     <>

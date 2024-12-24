@@ -10,6 +10,7 @@ import ManageStore from "../screens/ManageStore";
 import HeaderBar from "../components/HeaderBar";
 import {ProductScreen} from "../screens/ProductScreen";
 import {CategoryScreen} from "../screens/CategoryScreen";
+import {VoucherScreen} from "../screens/VoucherScreen";
 
 const {Content, Header} = Layout;
 
@@ -36,6 +37,7 @@ const MainRouter = () => {
             <Route path="/" element={<HomeScreen />} />
             <Route path="/categories" element={<CategoryScreen />} />
             <Route path="/products" element={<ProductScreen />} />
+            <Route path="/voucher" element={<VoucherScreen />} />
             <Route path="/report" element={<ReportScreen />} />
             <Route path="/supplier" element={<SupplierScreen />} />
             <Route path="/order" element={<OrderScreen />} />

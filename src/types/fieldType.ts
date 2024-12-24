@@ -74,6 +74,10 @@ type TreeSelectField = BaseField & {
   options: TreeNode[];
 };
 
+type DatePickerWithTimeField = BaseField & {
+  fieldType: "datePickerWithTime";
+};
+
 export type Field =
   | InputField
   | SelectField
@@ -82,7 +86,8 @@ export type Field =
   | DatePickerField
   | EditorField
   | TextAreaField
-  | TreeSelectField;
+  | TreeSelectField
+  | DatePickerWithTimeField;
 
 export type FormField = {
   name: string;

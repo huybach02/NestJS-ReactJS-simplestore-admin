@@ -54,7 +54,16 @@ const VariantForm = ({
       <Row gutter={16}>
         <Col span={12}>
           <Form.Item
-            label="Original Price"
+            label="Import Price ($)"
+            name="importPrice"
+            rules={[{required: true}]}
+          >
+            <InputNumber style={{width: "100%"}} />
+          </Form.Item>
+        </Col>
+        <Col span={12}>
+          <Form.Item
+            label="Original Price ($)"
             name="originalPrice"
             rules={[{required: true}]}
           >

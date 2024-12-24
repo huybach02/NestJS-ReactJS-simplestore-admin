@@ -94,14 +94,14 @@ export const CustomModal = ({
             handleDeleteImage();
             form.resetFields();
           }}
-          style={{width: "30%"}}
+          style={{width: "50%"}}
         >
           Cancel
         </Button>
         <Button
           type="primary"
           onClick={() => form.submit()}
-          style={{width: "30%"}}
+          style={{width: "50%"}}
         >
           Submit
         </Button>

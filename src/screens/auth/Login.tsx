@@ -69,7 +69,7 @@ const Login = () => {
             name="email"
             label="Email"
             rules={[{required: true, message: "Email is required"}]}
-            initialValue={"bach@gmail.com"}
+            initialValue={"admin@gmail.com"}
           >
             <Input placeholder="example@gmail.com" />
           </Form.Item>

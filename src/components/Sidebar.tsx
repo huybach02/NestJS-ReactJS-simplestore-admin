@@ -8,7 +8,7 @@ import {
   FaClipboardList,
   FaList,
 } from "react-icons/fa";
-import {RiSettingsFill} from "react-icons/ri";
+import {RiCoupon2Fill, RiSettingsFill} from "react-icons/ri";
 import {useSelector} from "react-redux";
 import {RootState} from "../redux/store";
 
@@ -38,6 +38,11 @@ export const Sidebar = () => {
       key: "products",
       label: <Link to="/products">Products</Link>,
       icon: <FaBoxes size={20} />,
+    },
+    {
+      key: "voucher",
+      label: <Link to="/voucher">Vouchers</Link>,
+      icon: <RiCoupon2Fill size={20} />,
     },
     {
       key: "report",

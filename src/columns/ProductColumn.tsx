@@ -99,7 +99,7 @@ export const ProductColumns = ({
           return (
             <Badge
               className="site-badge-count-109"
-              count={"Has Variant"}
+              count={`Has ${record.variants.length} Variant`}
               style={{backgroundColor: "#389e0d"}}
             />
           );

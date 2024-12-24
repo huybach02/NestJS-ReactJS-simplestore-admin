@@ -51,6 +51,10 @@ const ListVariant = ({
               ))}
             </p>
             <p>
+              <b>Import Price:</b>{" "}
+              <Tag color="blue">{formatMoney(item.importPrice)}</Tag>
+            </p>
+            <p>
               <b>Original Price:</b>{" "}
               <Tag color="green">{formatMoney(item.originalPrice)}</Tag>
             </p>

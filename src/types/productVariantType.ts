@@ -6,6 +6,7 @@ export type ProductVariantType = {
   name: string;
   slug: string;
   sizes: string[];
+  importPrice: number;
   originalPrice: number;
   hasSale: boolean;
   typeSale: string | null;
@@ -24,6 +25,7 @@ export type CreateProductVariantType = {
   name: string;
   slug: string;
   sizes: string[];
+  importPrice: number;
   originalPrice: number;
   hasSale: boolean;
   typeSale: string | null;

@@ -76,8 +76,33 @@ export const productForm = ({
       },
     },
     {
+      name: "importPrice",
+      label: "Import Price ($)",
+      rules: [
+        {
+          required: true,
+        },
+      ],
+      dependencies: ["hasVariant"],
+      hidden: (form) => {
+        if (form.getFieldValue("hasVariant") === true) {
+          return true;
+        } else if (form.getFieldValue("hasVariant") === false) {
+          return false;
+        } else {
+          return true;
+        }
+      },
+      field: {
+        fieldType: "input",
+        placeholder: "Enter Import Price",
+        allowClear: true,
+        type: "number",
+      },
+    },
+    {
       name: "originalPrice",
-      label: "Original Price",
+      label: "Original Price ($)",
       rules: [
         {
           required: true,

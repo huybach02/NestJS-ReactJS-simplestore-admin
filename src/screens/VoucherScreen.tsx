@@ -1,31 +1,28 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import {Flex, Form, Table} from "antd";
+import {Form, Table} from "antd";
 import {Grid} from "antd";
 
 import {useDispatch, useSelector} from "react-redux";
 import {CustomModal} from "../components/CustomModal";
 import {useEffect, useState} from "react";
-
-import {CreateSupplierType, SupplierType} from "../types/supplierType";
-
 import {RootState} from "../redux/store";
 import {usePage} from "../hook/usePage";
-import {replaceName} from "../utils/replaceName";
-import {SupplierColumns} from "../columns/SupplierColumn";
 import RenderForm from "../components/forms/RenderForm";
 import TitlePage from "../components/TitlePage";
-import UploadSingleImage from "../components/UploadSingleImage";
-import {supplierForm} from "../form/supplierForm";
 import ExportForm from "../exportForm/ExportForm";
 import {clearExportFields} from "../redux/slice/dataSlice";
 import {TableRowSelection} from "antd/es/table/interface";
 import {FilterGroup} from "../components/FilterGroup";
 import {useSearchParams} from "react-router-dom";
+import {CreateVoucherType, VoucherType} from "../types/voucherType";
+import {voucherForm} from "../form/voucherForm";
+import {VoucherColumns} from "../columns/VoucherColumn";
+import dayjs from "dayjs";
 
-const endpoint = "suppliers";
-type DataType = SupplierType;
+const endpoint = "vouchers";
+type DataType = VoucherType;
 
-export const SupplierScreen = () => {
+export const VoucherScreen = () => {
   const dispatch = useDispatch();
 
   const [searchParams] = useSearchParams();
@@ -33,8 +30,6 @@ export const SupplierScreen = () => {
   const {isLoading, isEditing, showModal, total} = useSelector(
     (state: RootState) => state.data
   );
-
-  const [photoUrl, setPhotoUrl] = useState<string>();
 
   const [itemSelected, setItemSelected] = useState<DataType>();
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
@@ -65,7 +60,7 @@ export const SupplierScreen = () => {
     filter,
   });
 
-  const columns = SupplierColumns({
+  const columns = VoucherColumns({
     dispatch,
     form,
     setItemSelected,
@@ -75,16 +70,20 @@ export const SupplierScreen = () => {
 
   useEffect(() => {
     if (!showModal) {
-      setPhotoUrl("");
       setItemSelected(undefined);
     }
   }, [showModal]);
 
-  const handleSubmit = (values: CreateSupplierType) => {
+  const handleSubmit = (values: CreateVoucherType) => {
+    console.log(values);
     handleSubmitForm({
       ...values,
-      slug: replaceName(values.name),
-      photoUrl: !isEditing ? photoUrl : photoUrl || itemSelected?.photoUrl,
+      startDate: values.startDate
+        ? dayjs(values.startDate).format("YYYY-MM-DD HH:mm:ss")
+        : null,
+      endDate: values.endDate
+        ? dayjs(values.endDate).format("YYYY-MM-DD HH:mm:ss")
+        : null,
     });
   };
 
@@ -103,7 +102,21 @@ export const SupplierScreen = () => {
 
   return (
     <div>
-      <FilterGroup filter={filter} setFilter={setFilter} />
+      <FilterGroup
+        filter={filter}
+        setFilter={setFilter}
+        otherFilter={[
+          {
+            key: "typeDiscount",
+            defaultValue: "",
+            options: [
+              {value: "", label: "Type: All"},
+              {value: "percentage", label: "Percentage"},
+              {value: "fixed", label: "Fixed"},
+            ],
+          },
+        ]}
+      />
       <Table
         dataSource={items}
         columns={columns}
@@ -132,7 +145,7 @@ export const SupplierScreen = () => {
         }}
         title={() => (
           <TitlePage
-            title="Suppliers"
+            title="Vouchers"
             endpoint={endpoint}
             formElement={<ExportForm endpoint={endpoint} />}
             selectedRowKeys={selectedRowKeys}
@@ -143,25 +156,12 @@ export const SupplierScreen = () => {
         rowSelection={rowSelection}
       />
       <CustomModal
-        title={isEditing ? "Edit Supplier" : "Add new supplier"}
+        title={isEditing ? "Edit Voucher" : "Add new voucher"}
         form={form}
         width={500}
       >
-        <Flex
-          justify="center"
-          align="center"
-          gap={10}
-          style={{marginTop: "20px"}}
-        >
-          <UploadSingleImage
-            title="Avatar"
-            photoUrl={photoUrl}
-            setPhotoUrl={setPhotoUrl}
-            oldImage={itemSelected?.photoUrl}
-          />
-        </Flex>
         <RenderForm
-          fields={supplierForm()}
+          fields={voucherForm()}
           form={form}
           handleSubmit={handleSubmit}
         />

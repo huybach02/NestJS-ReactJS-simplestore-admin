@@ -102,6 +102,20 @@ const RenderForm = ({fields, form, handleSubmit}: Props) => {
             }
           />
         );
+      case "datePickerWithTime":
+        return (
+          <DatePicker
+            style={{width: "100%"}}
+            showTime
+            placeholder={item.placeholder}
+            allowClear
+            value={
+              form.getFieldValue(fieldName)
+                ? dayjs(form.getFieldValue(fieldName))
+                : null
+            }
+          />
+        );
       case "textArea":
         return <TextArea rows={4} placeholder={item.placeholder} key={index} />;
       case "editor":

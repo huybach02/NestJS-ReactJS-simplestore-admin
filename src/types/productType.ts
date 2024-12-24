@@ -11,6 +11,7 @@ export type ProductType = {
     name: string;
   };
   hasVariant: boolean;
+  importPrice: number;
   originalPrice: number;
   hasSale: boolean;
   typeSale: string | null;
@@ -43,6 +44,7 @@ export type CreateProductType = {
   slug: string;
   sku: string;
   supplier: string;
+  importPrice: number;
   originalPrice: number;
   hasSale: boolean;
   typeSale: string | null;

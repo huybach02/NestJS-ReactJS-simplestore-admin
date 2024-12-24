@@ -105,4 +105,54 @@ export const exportCheckbox: ExportCheckbox = {
       label: "Status",
     },
   ],
+  vouchers: [
+    {
+      value: "title",
+      label: "Title",
+    },
+    {
+      value: "code",
+      label: "Code",
+    },
+    {
+      value: "startDate",
+      label: "Start Date",
+    },
+    {
+      value: "endDate",
+      label: "End Date",
+    },
+    {
+      value: "typeDiscount",
+      label: "Type Discount",
+    },
+    {
+      value: "valueDiscount",
+      label: "Value Discount",
+    },
+    {
+      value: "minOrder",
+      label: "Min Order",
+    },
+    {
+      value: "maxDiscount",
+      label: "Max Discount",
+    },
+    {
+      value: "maxUser",
+      label: "Max User",
+    },
+    {
+      value: "maxUserPerOrder",
+      label: "Max User Per Order",
+    },
+    {
+      value: "usedCount",
+      label: "Used Count",
+    },
+    {
+      value: "active",
+      label: "Status",
+    },
+  ],
 };
