@@ -3,7 +3,6 @@ import {Link, useLocation} from "react-router-dom";
 import {
   FaFire,
   FaBoxes,
-  FaChartPie,
   FaStore,
   FaClipboardList,
   FaList,
