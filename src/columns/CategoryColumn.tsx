@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import {Badge, Button, Flex, Tooltip} from "antd";
+import {Badge, Button, Flex, Image, Tooltip} from "antd";
 import {FiEdit, FiTrash} from "react-icons/fi";
 import {ColumnProps} from "antd/es/table";
 import {
@@ -35,6 +35,15 @@ Props): ColumnProps<CategoryType>[] => {
       title: "Category Name",
       dataIndex: "name",
       key: "name",
+    },
+    {
+      title: "Thumbnail",
+      dataIndex: "thumbnail",
+      key: "thumbnail",
+      render: (thumbnail) =>
+        thumbnail ? (
+          <Image src={thumbnail} alt="thumbnail" width={100} height={130} />
+        ) : null,
     },
     {
       title: "Product Count",

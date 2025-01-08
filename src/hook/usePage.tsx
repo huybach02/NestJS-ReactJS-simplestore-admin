@@ -34,6 +34,14 @@ export const usePage = ({
 
   const [searchParams, setSearchParams] = useSearchParams();
 
+  useEffect(() => {
+    const params: {[key: string]: string} = {};
+    searchParams.forEach((value, key) => {
+      params[key] = value;
+    });
+    console.log("URL Parameters:", params);
+  }, [searchParams]);
+
   const [currentPage, setCurrentPage] = useState(searchParams.get("page") || 1);
   const [currentLimit, setCurrentLimit] = useState(
     searchParams.get("limit") || 10

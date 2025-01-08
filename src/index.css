@@ -109,3 +109,31 @@ h6 {
   .ant-tree-list-holder-inner {
   background-color: #e5e5e5 !important;
 }
+
+.ant-steps-icon {
+  color: #fff !important;
+}
+
+.ant-tabs-tab-btn {
+  display: flex !important;
+  align-items: center !important;
+}
+
+.ant-tabs-tab-icon {
+  margin-top: 5px !important;
+}
+
+.ant-tabs-tab-active {
+  background-color: #000 !important;
+  color: #fff !important;
+  width: 98% !important;
+  height: 50px !important;
+  border-radius: 8px !important;
+  padding: 0 20px !important;
+  display: flex !important;
+  align-items: center !important;
+}
+
+.ant-tabs-tab-active .ant-tabs-tab-btn {
+  color: #fff !important;
+}

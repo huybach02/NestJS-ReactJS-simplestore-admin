@@ -66,6 +66,7 @@ export const ProductColumns = ({
       dataIndex: "supplier",
       key: "supplier",
       render: (supplier) => (supplier ? supplier.name : "------"),
+      minWidth: 100,
     },
     {
       title: "Category",

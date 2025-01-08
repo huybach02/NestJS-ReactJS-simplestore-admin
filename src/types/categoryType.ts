@@ -3,6 +3,7 @@ export type CategoryType = {
   name: string;
   slug: string;
   parentId: string;
+  thumbnail: string;
   active: boolean;
   createdAt: string;
 };

@@ -276,8 +276,21 @@ export const productForm = ({
       },
     },
     {
+      name: "shortDescription",
+      label: "Short Description",
+      rules: [
+        {
+          required: true,
+        },
+      ],
+      field: {
+        fieldType: "textArea",
+        placeholder: "Enter Short Description",
+      },
+    },
+    {
       name: "description",
-      label: "Description",
+      label: "Detail Description",
       rules: [
         {
           required: true,

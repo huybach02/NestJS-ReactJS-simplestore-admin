@@ -113,7 +113,7 @@ export const voucherForm = (): FormFields => {
     },
     {
       name: "maxDiscount",
-      label: "Max Discount Amount",
+      label: "Max Discount Amount ($)",
       rules: [
         {
           required: true,

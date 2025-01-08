@@ -9,7 +9,7 @@ type Props = {
   title: string;
   photoUrl: string | undefined;
   setPhotoUrl: any;
-  oldImage: any;
+  oldImage?: any;
 };
 
 const UploadSingleImage = ({

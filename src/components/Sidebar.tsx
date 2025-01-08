@@ -8,6 +8,7 @@ import {
   FaClipboardList,
   FaList,
 } from "react-icons/fa";
+import {MdRateReview} from "react-icons/md";
 import {RiCoupon2Fill, RiSettingsFill} from "react-icons/ri";
 import {useSelector} from "react-redux";
 import {RootState} from "../redux/store";
@@ -45,11 +46,6 @@ export const Sidebar = () => {
       icon: <RiCoupon2Fill size={20} />,
     },
     {
-      key: "report",
-      label: <Link to="/report">Reports</Link>,
-      icon: <FaChartPie size={20} />,
-    },
-    {
       key: "supplier",
       label: <Link to="/supplier">Suppliers</Link>,
       icon: <FaStore size={20} />,
@@ -58,6 +54,11 @@ export const Sidebar = () => {
       key: "order",
       label: <Link to="/order">Orders</Link>,
       icon: <FaClipboardList size={20} />,
+    },
+    {
+      key: "review",
+      label: <Link to="/review">Reviews</Link>,
+      icon: <MdRateReview size={20} />,
     },
     {
       key: "manage-store",

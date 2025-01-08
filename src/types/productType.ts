@@ -31,6 +31,7 @@ export type ProductType = {
   takingReturn: string | null;
   thumbnail: string | null;
   photoUrls: string[];
+  shortDescription: string;
   description: string;
   images: string[];
   variants: ProductVariantType[];
@@ -57,6 +58,7 @@ export type CreateProductType = {
   takingReturn: string | null;
   thumbnail: string | null;
   photoUrls: string[];
+  shortDescription: string;
   description: string;
   active: boolean;
 };

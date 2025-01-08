@@ -8,6 +8,7 @@ export const FilterGroup = ({
   setFilter,
   otherFilter,
   hasFilterCategory,
+  showStatusFilter = true,
 }: {
   filter: any;
   setFilter: any;
@@ -16,6 +17,7 @@ export const FilterGroup = ({
     isShow: boolean;
     options: any;
   };
+  showStatusFilter?: boolean;
 }) => {
   const [searchParams] = useSearchParams();
 
@@ -44,20 +46,22 @@ export const FilterGroup = ({
           {value: "name_desc", label: "Sort by Name Z-A"},
         ]}
       />
-      <Select
-        defaultValue={
-          searchParams.get("active")
-            ? searchParams.get("active") === "true"
-            : ""
-        }
-        style={{width: 130}}
-        onChange={(value) => setFilter({...filter, active: value})}
-        options={[
-          {value: "", label: "Status: All"},
-          {value: true, label: "Status: Active"},
-          {value: false, label: "Status: Inactive"},
-        ]}
-      />
+      {showStatusFilter && (
+        <Select
+          defaultValue={
+            searchParams.get("active")
+              ? searchParams.get("active") === "true"
+              : ""
+          }
+          style={{width: 130}}
+          onChange={(value) => setFilter({...filter, active: value})}
+          options={[
+            {value: "", label: "Status: All"},
+            {value: true, label: "Status: Active"},
+            {value: false, label: "Status: Inactive"},
+          ]}
+        />
+      )}
       {otherFilter &&
         otherFilter.map((item: any) => (
           <Select
@@ -69,7 +73,8 @@ export const FilterGroup = ({
         ))}
       {hasFilterCategory && hasFilterCategory.isShow && (
         <TreeSelect
-          treeData={[{title: "All", value: ""}, ...hasFilterCategory.options]}
+          treeData={[...hasFilterCategory.options]}
+          defaultValue={searchParams.get("category") || ""}
           placeholder="Filter by category"
           treeDefaultExpandAll
           style={{width: "400px"}}

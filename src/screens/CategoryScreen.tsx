@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import {Form, Table} from "antd";
+import {Flex, Form, message, Table} from "antd";
 import {Grid} from "antd";
 
 import {useDispatch, useSelector} from "react-redux";
@@ -19,6 +19,7 @@ import {baseService} from "../service/baseService";
 import {handleTreeValue} from "../utils/handleTreeValue";
 import RenderForm from "../components/forms/RenderForm";
 import {categoryForm} from "../form/categoryForm";
+import UploadSingleImage from "../components/UploadSingleImage";
 
 const endpoint = "categories";
 type DataType = CategoryType;
@@ -32,6 +33,8 @@ export const CategoryScreen = () => {
 
   const [itemSelected, setItemSelected] = useState<DataType>();
   const [categories, setCategories] = useState<any[]>([]);
+
+  const [photoUrl, setPhotoUrl] = useState<string>("");
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [_items, setItems] = useState<DataType[]>([]);
@@ -65,15 +68,25 @@ export const CategoryScreen = () => {
 
   useEffect(() => {
     if (!showModal) {
+      setPhotoUrl("");
       setItemSelected(undefined);
     }
     fetchCategories();
   }, [showModal]);
 
   const handleSubmit = (values: CreateProductType) => {
+    if (
+      !form.getFieldValue("parentId") &&
+      (!isEditing ? !photoUrl : !photoUrl && !itemSelected?.thumbnail)
+    ) {
+      message.error("Please upload a thumbnail for root category");
+      return;
+    }
+
     handleSubmitForm({
       ...values,
       slug: replaceName(values.name),
+      thumbnail: !isEditing ? photoUrl : photoUrl || itemSelected?.thumbnail,
     });
   };
 
@@ -99,7 +112,7 @@ export const CategoryScreen = () => {
         rowKey="_id"
         scroll={{
           x: "max-content",
-          y: `calc(100vh - ${lg ? "320px" : "120px"})`,
+          y: `calc(100vh - ${lg ? "260px" : "120px"})`,
         }}
         pagination={false}
         // pagination={{
@@ -132,6 +145,19 @@ export const CategoryScreen = () => {
         form={form}
         width={500}
       >
+        <Flex
+          justify="center"
+          align="center"
+          gap={10}
+          style={{marginTop: "20px"}}
+        >
+          <UploadSingleImage
+            title="Thumbnail"
+            photoUrl={photoUrl}
+            setPhotoUrl={setPhotoUrl}
+            oldImage={itemSelected?.thumbnail}
+          />
+        </Flex>
         <RenderForm
           fields={categoryForm({
             selectOptions: [

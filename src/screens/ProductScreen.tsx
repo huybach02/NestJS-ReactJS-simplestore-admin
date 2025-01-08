@@ -60,6 +60,9 @@ export const ProductScreen = () => {
     search: searchParams.get("search") || "",
     sort: searchParams.get("sort") || "createdAt_desc",
     active: searchParams.get("active") || "",
+    quantity: searchParams.get("quantity") || "",
+    supplier: searchParams.get("supplier") || "",
+    category: searchParams.get("category") || "",
   });
 
   const [items, setItems] = useState<DataType[]>([]);
@@ -162,7 +165,7 @@ export const ProductScreen = () => {
         otherFilter={[
           {
             key: "quantity",
-            defaultValue: searchParams.get("quantity") || "",
+            defaultValue: "",
             options: [
               {label: "Quantity: All", value: ""},
               {label: "Quantity: In Stock", value: "quantity_gt_0"},
@@ -172,14 +175,14 @@ export const ProductScreen = () => {
           },
           {
             key: "supplier",
-            defaultValue: searchParams.get("supplier") || "",
+            defaultValue: "",
             options: [{label: "Supplier: All", value: ""}, ...suppliers],
             width: 200,
           },
         ]}
         hasFilterCategory={{
           isShow: true,
-          options: categories,
+          options: [{label: "Category: All", value: ""}, ...categories],
         }}
       />
       <Table

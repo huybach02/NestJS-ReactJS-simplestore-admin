@@ -79,4 +79,19 @@ export const baseService = {
   actionWhenSelected: async (endpoint: string, data: any) => {
     return await axiosInstance.post(`${endpoint}/action-when-selected`, data);
   },
+  updateOrderStatus: async (endpoint: string, id: string, data: any) => {
+    return await axiosInstance.patch(`${endpoint}/${id}`, data);
+  },
+  manageWebsite: async (key: string, data: any) => {
+    return await axiosInstance.post(`manage-website?key=${key}`, data);
+  },
+  getManageWebsite: async (key: string) => {
+    return await axiosInstance.get(`manage-website?key=${key}`);
+  },
+  updateManageWebsite: async (key: string, data: any) => {
+    return await axiosInstance.patch(`manage-website?key=${key}`, data);
+  },
+  getDashboard: async () => {
+    return await axiosInstance.get("dashboard");
+  },
 };

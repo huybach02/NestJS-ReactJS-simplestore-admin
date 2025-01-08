@@ -114,6 +114,8 @@ export default function QuillEditor({value, onChange}: QuillEditorProps) {
         "image",
         "video",
         "code-block",
+        "align",
+        "direction",
       ]}
       value={value || ""}
       onChange={handleChange}

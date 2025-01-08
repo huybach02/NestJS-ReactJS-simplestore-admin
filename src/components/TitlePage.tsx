@@ -32,6 +32,8 @@ const TitlePage = ({
   selectedRowKeys,
   setSelectedRowKeys,
   handleGetData,
+  showAddButton = true,
+  showExport = true,
 }: {
   title: string;
   endpoint: string;
@@ -39,6 +41,8 @@ const TitlePage = ({
   selectedRowKeys?: React.Key[];
   setSelectedRowKeys?: (selectedRowKeys: React.Key[]) => void;
   handleGetData?: () => void;
+  showAddButton?: boolean;
+  showExport?: boolean;
 }) => {
   const dispatch = useDispatch();
 
@@ -102,21 +106,28 @@ const TitlePage = ({
         </Col>
         <Col span={lg ? 8 : 24}>
           <Flex align="center" justify={lg ? "end" : "start"} gap={10} wrap>
-            <Button
-              type="primary"
-              onClick={() => {
-                dispatch(setShowModal());
-              }}
-              icon={<TbPlus size={16} />}
-            >
-              Add new {transformTitle(title)}
-            </Button>
-            <Flex gap={10}>
-              {/* <Button icon={<TbFilter size={16} />}>Filters</Button> */}
-              <Button icon={<TbDownload size={16} />} onClick={handleDownload}>
-                Export excel
+            {showAddButton && (
+              <Button
+                type="primary"
+                onClick={() => {
+                  dispatch(setShowModal());
+                }}
+                icon={<TbPlus size={16} />}
+              >
+                Add new {transformTitle(title)}
               </Button>
-            </Flex>
+            )}
+            {showExport && (
+              <Flex gap={10}>
+                {/* <Button icon={<TbFilter size={16} />}>Filters</Button> */}
+                <Button
+                  icon={<TbDownload size={16} />}
+                  onClick={handleDownload}
+                >
+                  Export excel
+                </Button>
+              </Flex>
+            )}
           </Flex>
         </Col>
       </Row>
